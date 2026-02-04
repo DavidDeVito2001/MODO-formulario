@@ -1,0 +1,3106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary-color: #F47C13;
+      --secondary-color: #282A2E;
+      --background-color: #707a7d;
+      --card-color: #ffffff;
+      --text-color: #333333;
+      --error-color: #e74c3c;
+      --success-color: #2ecc71;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      line-height: 1.6;
+      background-image: url("https://raw.githubusercontent.com/DavidDeVito2001/TradingImages/refs/heads/main/fondoDiamonds.png");
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 800px;
+      margin: 2rem;
+      background-color: var(--card-color);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .logo-img {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-img img {
+      max-width: 80%;
+      height: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 4rem;
+      color: var(--primary-color);
+      margin: 1rem;
+      font-weight: 700;
+      text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.7);
+    }
+
+
+    #formulario-auditor-nombre {
+      display: flex;
+      flex-direction: column;
+      margin: 1.5rem 0;
+      width: 100%;
+    }
+
+    h3 {
+      color: var(--primary-color);
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      ;
+    }
+
+    button {
+      display: inline-block;
+      padding: 0.6rem 0.8rem;
+      margin: 0.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #e06d0f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .desactivado {
+      color: var(--text-color);
+      background-color: #d3d3d3;
+    }
+
+    .desactivado:hover {
+      background-color: #d3d3d3;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    #fecha-de-la-campania {
+      font-weight: 700;
+      text-align: center;
+      margin: 1rem 0 0.3rem 0;
+    }
+
+    /*inicio-totales*/
+    #contenedor-totales {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 1.2rem;
+      margin: 15px;
+      border-radius: 8px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
+      background-color: rgb(240, 240, 240);
+      transition: transform 0.2s ease;
+    }
+
+    #contenedor-totales:hover {
+      transform: scale(1.02);
+    }
+
+    #total-casos,
+    #total-casos-hechos,
+    #total-casos-para-editar {
+      font-weight: 600;
+    }
+
+    /*inicio-buscador*/
+    #contenedor-buscador {
+      margin: 1rem 0 0.3rem 0;
+    }
+
+    #buscador {
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.4rem;
+    }
+
+    #contenedor-buscador label {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    /*CARD del caso*/
+    .card-caso {
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .card-caso:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 10px rgba(244, 124, 19, 0.3);
+    }
+
+    .card-caso p {
+      font-weight: 500;
+
+    }
+
+    .estado {
+      color: red;
+    }
+
+    .completado {
+      color: green;
+    }
+
+    /* Estilos para el modal */
+    .modal {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-contenido {
+      background-color: #e8eced;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 5px;
+    }
+
+    .cerrar {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cerrar:hover {
+      color: black;
+    }
+
+    .formulario {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 8px;
+      max-height: 57vh;
+      overflow-y: overlay;
+      margin-bottom: 5px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+
+    /**/
+    /*label, input, button, select - GENERALES*/
+
+    label,
+    legend {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    legend {
+      text-align: center;
+    }
+
+    input[type="file"]+label {
+      color: var(--text-color) !important;
+    }
+
+    input {
+      font-size: 1.4rem;
+      padding: 0.4rem
+    }
+
+    input[type="number"],
+    input[type="text"],
+    input[type="check-box"],
+    input[type="file"],
+    input[type="email"],
+    select,
+    legend,
+    fieldset {
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    input[type="check-box"],
+    input[type="file"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    legend:focus,
+    fieldset:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(244, 124, 19, 0.5);
+    }
+
+    /* Remove number input arrows */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /*input[type=number] {
+        -moz-appearance: textfield;
+      }*/
+
+    input[type=number]:focus {
+      background-color: rgba(205, 205, 205, 0.4);
+    }
+
+    select {
+      font-size: 1.4rem;
+      padding: 0.4rem
+    }
+
+    /*check-box*/
+    /* Estilo general del contenedor del checkbox */
+    .checkbox-group {
+      margin-bottom: 1em;
+      padding: 1em;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    /* Estilo para cada opción */
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-family: sans-serif;
+    }
+
+    /* Personalización del checkbox */
+    .checkbox-group input[type="checkbox"] {
+      accent-color: var(--primary-color);
+      /* Azul moderno */
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Campo de texto del "Otro" */
+    .checkbox-group input[type="text"] {
+      padding: 6px;
+      font-size: 0.9em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /*fin-check-box*/
+
+    /*inicio-Mensajes*/
+    #bienvenida-usuario {
+      background-color: rgba(52, 152, 219, 0.1);
+      color: #3498db;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    #msg-guardado {
+      font-size: 1rem;
+      background-color: rgba(46, 204, 113, 0.1);
+      color: var(--success-color);
+      padding: 0.8rem;
+      border-radius: var(--border-radius);
+      margin: 0.5rem 0;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    #msg-guardado-editar {
+      font-size: 1rem;
+      background-color: rgba(46, 204, 113, 0.1);
+      color: var(--success-color);
+      padding: 0.8rem;
+      border-radius: var(--border-radius);
+      margin: 0.5rem 0;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    #mensajeError {
+      background-color: rgba(231, 76, 60, 0.1);
+      color: var(--error-color);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    #msm-error {
+      background-color: rgba(231, 76, 60, 0.1);
+      color: var(--error-color);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /*PREVIEW IMAGEN*/
+
+    .preview-image {
+      max-height: 250px;
+    }
+
+    .progress-output {
+      max-height: 50px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 10px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      background: #f9fafb;
+      margin-top: 15px;
+      font-family: system-ui, sans-serif;
+      font-size: 1rem;
+      color: #333;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .progress-output::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari */
+    }
+
+    .progress-output div {
+      word-wrap: break-word;
+      margin-bottom: 6px;
+      background: #fff;
+      border-radius: 6px;
+      padding: 6px 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+    /*contenedores*/
+    .seccion-formulario {
+      display: block;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      transform-origin: top center;
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .seccion-formulario.hidden {
+      opacity: 0;
+      transform: scale(0.95) translateY(-15px);
+      pointer-events: none;
+      height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+
+    @media (max-width: 1250px) {
+      .contenedor {
+        min-height: 100%;
+        max-width: 100%;
+        margin: 20px;
+      }
+
+      #contenedor-totales {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+
+      h1 {
+        font-size: 5.5rem;
+      }
+
+      /*inicio-buscador*/
+      #contenedor-buscador {
+        margin: 1rem 0 0.3rem 0;
+      }
+
+      #contenedor-buscador label {
+        font-size: 2.8rem;
+        font-weight: 700;
+      }
+
+      #buscador {
+        font-size: 2.8rem;
+        font-weight: 700;
+        padding: 0.4rem;
+      }
+
+      .preview-image {
+        max-height: 250px !important;
+      }
+
+      label {
+        font-size: 2.8rem;
+      }
+
+      input[type="number"],
+      input[type="text"],
+      input[type="check-box"],
+      input[type="file"],
+      input[type="email"],
+      select,
+      legend,
+      fieldset {
+        font-size: 3rem;
+      }
+
+      input[type="check-box"] {
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        /* Animación de cambio de color */
+      }
+
+      input[type="checkbox"]:checked {
+        background-color: var(--primary-color);
+        border-color: #4CAF50;
+      }
+
+      h3 {
+        font-size: 4rem;
+      }
+
+      p {
+        font-size: 2.8rem;
+      }
+
+      .modal {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 2rem;
+        overflow-y: auto;
+      }
+
+      .modal-contenido {
+        width: 95vw !important;
+        /* Usamos vw para asegurar el 95% del viewport */
+        max-width: 95vw !important;
+        /* Forzamos el máximo ancho */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      h2 {
+        font-size: 4rem;
+      }
+
+      .formulario {
+        max-height: none;
+        padding: 3rem;
+        margin-bottom: 3rem;
+      }
+
+      .cerrar {
+        font-size: 5rem;
+      }
+
+      /* FORM ELEMENTS - TAMAÑOS CORREGIDOS */
+      .form-group {
+        margin-bottom: 4rem;
+      }
+
+      .form-group label {
+        font-size: 3.2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group input,
+      .form-group select {
+        font-size: 3rem;
+        padding: 1.5rem;
+        border-width: 3px;
+      }
+
+      /* CHECKBOX GROUP - VERSIÓN TÁCTIL */
+      .checkbox-group {
+        padding: 2.5rem;
+        margin: 3rem 0;
+      }
+
+      .checkbox-group label {
+        font-size: 3rem;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        align-items: center;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: 3rem !important;
+        height: 3rem !important;
+        min-width: 3rem;
+        min-height: 3rem;
+      }
+
+      /* BOTONES MÁS GRANDES */
+      button {
+        font-size: 2.8rem;
+        padding: 2rem 3rem;
+        margin: 2rem 0.5rem;
+        min-height: 7rem;
+      }
+
+      /* MENSAJES DE ESTADO */
+      #msg-guardado,
+      #msg-guardado-editar,
+      #mensajeError,
+      #msm-error,
+      #bienvenida-usuario {
+        font-size: 2.8rem;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .progress-output {
+        max-height: 140px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="contenedor">
+    <div class="logo-img">
+      <img src="https://raw.githubusercontent.com/DavidDeVito2001/TradingImages/refs/heads/main/LogoTradingGrande.png"
+        alt="Logo">
+    </div>
+    <h1>Formulario de Carga</h1>
+    <form id="formulario-auditor-nombre" onsubmit="event.preventDefault(); cargarCasos();">
+      <label for="auditor">Ingresa tu DNI:</label>
+      <input type="number" id="auditor" placeholder="32654847" required>
+      <button type="submit" id="consultarBtn">Consultar</button>
+      <p id="mensajeError" class="hidden">El DNI ingresado es incorrecto o no tiene casos asignados.</p>
+      <p id="bienvenida-usuario" class="hidden"></p>
+    </form>
+    <div id="contenedor-formulario" class="hidden">
+      <h1>Elegí el local que queres completar</h1>
+      <p id="fecha-de-la-campania">
+      <p>
+      <div id="contenedor-totales">
+        <p id="total-casos"></p>
+        <p id="total-casos-hechos"></p>
+        <p id="total-casos-para-editar"></p>
+      </div>
+      <div id="contenedor-buscador">
+        <label for="buscador">BUSCA TU CASO SEGÚN EL ID:</label>
+        <input type="text" name="buscador" id="buscador" placeholder="9012"></input>
+      </div>
+      <div id="cartas-casos"></div>
+    </div>
+  </div>
+  <script>
+    function cargarCasos() {
+      auditorDNI = document.getElementById("auditor").value;
+      if (!auditorDNI) return;
+
+      // Mostrar estado de carga
+      const consultarBtn = document.getElementById("consultarBtn");
+      consultarBtn.disabled = true;
+      consultarBtn.textContent = 'Consultando...';
+
+      //variables de mensajes
+      let mensajeError = document.getElementById("mensajeError");
+      mensajeError.classList.add("hidden");
+      let bienvenidaUsuario = document.getElementById("bienvenida-usuario");
+      bienvenidaUsuario.classList.add("hidden");
+
+      //variable del contenedor formulario
+      let mostrarContenedor = document.getElementById("contenedor-formulario");
+      mostrarContenedor.classList.add("hidden");
+
+      google.script.run
+        .withSuccessHandler(function (datosValidos) {
+          console.log(datosValidos);
+          if (datosValidos.valido === true) {
+            bienvenidaUsuario.classList.remove("hidden");
+            bienvenidaUsuario.textContent = `Bienvenido/a ${datosValidos.nombre} al formulario de MODO.`
+            consultarBtn.disabled = false;
+            consultarBtn.textContent = 'Consultar';
+            mensajeError.classList.add("hidden");
+            mostrarContenedor.classList.remove("hidden");
+
+            localStorage.setItem("session_token", datosValidos.token);
+            localStorage.setItem("session_nombre", datosValidos.nombre);
+
+            let datosFiltrados = {
+              nombre: datosValidos.nombre,
+              dni: datosValidos.dni,
+              casos: datosValidos.casos,
+            };
+
+            mostrarCasos(datosFiltrados);
+
+            // FILTRO
+            document.getElementById("buscador").addEventListener("input", function (e) {
+              let valorBuscado = e.target.value.trim().toLowerCase();
+
+              if (valorBuscado === "") {
+                mostrarCasos(datosFiltrados);
+                return;
+              }
+
+              // Filtramos sobre los casos originales
+              let casosFiltrados = datosFiltrados.casos.filter(caso =>
+                caso.idCaso.toString().toLowerCase().includes(valorBuscado)
+              );
+
+              // Volvemos a llamar mostrarCasos con misma estructura
+              mostrarCasos({
+                nombre: datosFiltrados.nombre,
+                dni: datosFiltrados.dni,
+                casos: casosFiltrados
+              }, true);
+            });
+          } else {
+            mensajeError.classList.remove("hidden");
+            consultarBtn.disabled = false;
+            consultarBtn.textContent = 'Consultar';
+            bienvenidaUsuario.classList.add("hidden");
+            mostrarContenedor.classList.add("hidden");
+          }
+        }
+        )
+        .withFailureHandler(function (e) {
+          console.log(e);
+          consultarBtn.disabled = false;
+          consultarBtn.textContent = 'Consultar';
+        })
+        .getDatosAuditor(auditorDNI);
+    }
+
+    /*-------------SECCIÓN-"COMPLETAR"---------------*/
+    const estadoFormulario = {
+      secciones: new Map([
+        // ============================================
+        // SECCIÓN PRINCIPAL: Estado del Local
+        // ============================================
+        ['tiene-promo-contenedor', {
+          visible: false,
+          dependeDe: null,
+          descripcion: 'Contenedor principal cuando hay promo'
+        }],
+
+        ['primer-flujo-neutro', {
+          visible: false,
+          dependeDe: null,
+          descripcion: 'Preguntas generales (vidriera, señalización interna, línea de cajas)'
+        }],
+
+        ['qr-impreso-contenedor', {
+          visible: false,
+          dependeDe: null,
+          descripcion: 'Sección de QR impreso (si caso.qrImpreso === "SI")'
+        }],
+
+        ['qr-mercado-pago-contenedor', {
+          visible: false,
+          dependeDe: null,
+          descripcion: 'Pregunta sobre QR de Mercado Pago'
+        }],
+
+        ['otras-billeteras-contenedor', {
+          visible: false,
+          dependeDe: null,
+          descripcion: 'Señalización de otras billeteras virtuales'
+        }],
+
+        // ============================================
+        // SUB-SECCIÓN: Promo MODO (dentro de tiene-promo-contenedor)
+        // ============================================
+        ['pregunta-tiene-promocionModo-contenedor', {
+          visible: false,
+          dependeDe: 'tiene-promo-contenedor',
+          descripcion: 'Pregunta adicional si NO ofreció promo MODO'
+        }],
+
+        ['indica-zona-senializacion-contenedor', {
+          visible: false,
+          dependeDe: 'tiene-promo-contenedor',
+          descripcion: 'Checkbox de zonas de señalización de promo'
+        }],
+
+        // ============================================
+        // SUB-SECCIÓN: Otras Billeteras (dentro de otras-billeteras-contenedor)
+        // ============================================
+        ['contenedor-interno-otras-billeteras', {
+          visible: false,
+          dependeDe: 'otras-billeteras-contenedor',
+          descripcion: 'Tipo, ubicación e indicación de billeteras señalizadas'
+        }],
+
+        // ============================================
+        // SECCIÓN: ¿Con qué puedo pagar?
+        // ============================================
+        ['con-que-puedo-pagar-contenedor', {
+          visible: false,
+          dependeDe: null,
+          descripcion: 'Pregunta principal: Menciono MODO o No menciono MODO'
+        }],
+
+        // ============================================
+        // FLUJO A: Menciono MODO
+        // ============================================
+        ['menciono-modo', {
+          visible: false,
+          dependeDe: 'con-que-puedo-pagar-contenedor',
+          descripcion: 'Contenedor cuando el comercio menciona MODO'
+        }],
+
+        // En estadoFormulario:
+        ['como-te-cobran-menciono-contenedor', {
+          visible: false,
+          dependeDe: 'menciono-modo'
+        }],
+
+        ['porque-no-se-puede-pagar-menciono-contenedor', {
+          visible: false,
+          dependeDe: 'menciono-modo',
+          descripcion: 'Razones por las que no acepta MODO - hijo de menciono-modo'
+        }],
+
+        // ============================================
+        // FLUJO B: No Menciono MODO (mutuamente exclusivo con Flujo A)
+        // ============================================
+        ['no-menciono-modo', {
+          visible: false,
+          dependeDe: 'con-que-puedo-pagar-contenedor',
+          descripcion: 'Contenedor cuando el comercio NO menciona MODO'
+        }],
+
+        ['como-te-cobran-no-menciono-contenedor', {
+          visible: false,
+          dependeDe: 'no-menciono-modo'
+        }],
+
+        ['porque-no-se-puede-pagar-no-menciono-contenedor', {
+          visible: false,
+          dependeDe: 'no-menciono-modo',
+          descripcion: 'Razones por las que no acepta MODO - hijo de menciono-modo'
+        }],
+
+        // ============================================
+        // SECCIÓN: Procedimiento de Cobro
+        // ============================================
+        ['como-es-el-procedimiento-contenedor', {
+          visible: false,
+          dependeDe: null,
+          descripcion: 'Procedimiento de cobro y promos bancarias'
+        }],
+
+        ['diferentes-promos-bancarias-contenedor', {
+          visible: false,
+          dependeDe: 'como-es-el-procedimiento-contenedor',
+          descripcion: 'Checkboxes de bancos con/sin promo MODO'
+        }],
+
+        // ============================================
+        // SECCIONES FINALES (siempre visibles)
+        // ============================================
+        ['ultimo-contenedor-1', {
+          visible: true,
+          dependeDe: null,
+          descripcion: 'Foto frente del local (siempre visible)'
+        }],
+
+        ['ultimo-contenedor-2', {
+          visible: true,
+          dependeDe: null,
+          descripcion: 'Observaciones (siempre visible)'
+        }]
+      ]),
+
+      mostrarSeccion(id) {
+        const seccion = this.secciones.get(id);
+        if (seccion) {
+          seccion.visible = true;
+          const elemento = document.getElementById(id);
+          if (elemento) {
+            elemento.classList.remove('hidden');
+            // RESTAURAR required al mostrar
+            this.restaurarRequired(elemento);
+            this.habilitarValidacionCheckbox(elemento);
+          }
+        }
+      },
+
+      ocultarSeccion(id, limpiarDatos = true) {
+        const seccion = this.secciones.get(id);
+        if (seccion) {
+          seccion.visible = false;
+          const elemento = document.getElementById(id);
+          if (elemento) {
+            elemento.classList.add('hidden');
+            //REMOVER required al ocultar
+            this.removerRequired(elemento);
+            this.deshabilitarValidacionCheckbox(elemento);
+            if (limpiarDatos) this.limpiarInputs(elemento);
+          }
+        }
+      },
+
+      //Nueva función: Remover required de todos los campos
+      removerRequired(contenedor) {
+        contenedor.querySelectorAll('input[required], select[required], textarea[required]').forEach(campo => {
+          // Guardar el estado original en un atributo data
+          campo.setAttribute('data-was-required', 'true');
+          campo.removeAttribute('required');
+        });
+      },
+
+      // Restaurar required a los campos que lo tenían
+      restaurarRequired(contenedor) {
+        contenedor.querySelectorAll('[data-was-required="true"]').forEach(campo => {
+          campo.setAttribute('required', 'true');
+        });
+      },
+
+      // Nueva función: Deshabilitar validación de checkboxes
+      deshabilitarValidacionCheckbox(contenedor) {
+        contenedor.querySelectorAll('[data-requiere-check]').forEach(fieldset => {
+          const valorOriginal = fieldset.getAttribute('data-requiere-check');
+          // Guardar el valor original y remover el atributo
+          fieldset.setAttribute('data-requiere-check-original', valorOriginal);
+          fieldset.removeAttribute('data-requiere-check');
+        });
+      },
+
+      //Nueva función: Habilitar validación de checkboxes
+      habilitarValidacionCheckbox(contenedor) {
+        contenedor.querySelectorAll('[data-requiere-check-original]').forEach(fieldset => {
+          const valorOriginal = fieldset.getAttribute('data-requiere-check-original');
+          fieldset.setAttribute('data-requiere-check', valorOriginal);
+        });
+      },
+
+      limpiarInputs(contenedor) {
+        contenedor.querySelectorAll('input[type="text"], input[type="number"]').forEach(i => i.value = '');
+        contenedor.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+        contenedor.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+        contenedor.querySelectorAll('input[type="file"]').forEach(f => {
+          f.value = '';
+          const preview = document.getElementById(`preview-${f.id}`);
+          if (preview) preview.style.display = 'none';
+        });
+      },
+
+      resetearFormulario() {
+        this.secciones.forEach((_, id) => {
+          if (id !== 'ultimo-contenedor-1' && id !== 'ultimo-contenedor-2') {
+            this.ocultarSeccion(id, true);
+          }
+        });
+      },
+
+      estadoActual() {
+        const estado = {};
+        this.secciones.forEach((seccion, id) => {
+          estado[id] = seccion.visible;
+        });
+        return estado;
+      },
+
+      existe(id) {
+        return this.secciones.has(id);
+      }
+    };
+
+    // AGREGAR ESTO AL INICIO, DESPUÉS DE estadoFormulario
+    const CONFIG_PREGUNTAS = {
+      S: {
+        mostrarPreguntas: {
+          'tiene-promo-contenedor': true,
+          'primer-flujo-neutro': true,
+          'qr-impreso-contenedor': true,
+          'qr-mercado-pago-contenedor': true,
+          'otras-billeteras-contenedor': true,
+          'con-que-puedo-pagar-contenedor': true,
+          'como-es-el-procedimiento-contenedor': true,
+        },
+
+        elementosOcultos: [
+          //Si no querés mostrar algo específico en comercios
+        ],
+
+        titulos: {
+          'indica-zona-senializacion-titulo': 'Indica en qué zona del local se encuentra la señalización de la promo MODO',
+          'vidriera-indica-modo-titulo': '¿En la vidriera indica que se puede pagar con MODO?',
+          'foto-3-titulo': 'Foto - Se debe tomar foto de la vidriera / acceso al Local',
+          'senializacion-modo-dentro-local-titulo': '¿Hay señalización de MODO dentro del local? (Si el local es CON PROMO no tengas en cuenta la PROMO MODO)',
+          'ubicacion-senializacion-modo-titulo': '¿Donde esta ubicada la señalización MODO? (Si el local es CON PROMO no tengas en cuenta la PROMO MODO)',
+          'foto-4-titulo': 'Foto - Foto testigo dentro del local o de la señalización',
+          'linea-de-cajas-titulo': 'Línea de cajas',
+          'foto-5-titulo': 'Foto - Foto testigo línea de cajas (con o sin pop)'
+        },
+
+        opciones: {
+          'indica-zona-senializacion': [
+            'Al Ingreso',
+            'En Pasillos/Gondolas',
+            'En Linea de Cajas',
+            'Sin Señalización'
+          ],
+          'vidriera-indica-modo': [
+            'SI, con Promos Bancarias',
+            'SI, otras Promos',
+            'Señalizacion Generica',
+            'Sin señalizacion',
+            'No tiene Vidriera'
+          ],
+          'ubicacion-senializacion-modo': [
+            "Pasillos/Gondolas",
+            "Sin Señalizacion"
+          ],
+          'ubicacion-senializacion-otras-billeteras': [
+            'Al Ingreso',
+            'En Pasillos/Gondolas',
+            'En Cajas'
+          ]
+        }
+      },
+
+      E: {
+        mostrarPreguntas: {
+          'tiene-promo-contenedor': true,
+          'primer-flujo-neutro': true,
+          'qr-impreso-contenedor': false,
+          'qr-mercado-pago-contenedor': true,
+          'otras-billeteras-contenedor': true,
+          'con-que-puedo-pagar-contenedor': true,
+          'como-es-el-procedimiento-contenedor': true,
+        },
+
+        elementosOcultos: [
+          'vidriera-indica-modo-contenedor'
+        ],
+
+        titulos: {
+          'indica-zona-senializacion-titulo': 'Indica en qué zona de la estación de servicio se encuentra la señalización de la promo MODO',
+          'foto-3-titulo': 'Foto - Se debe tomar foto del frente del shop',
+          'senializacion-modo-dentro-local-titulo': '¿Hay señalización de MODO en la estación de servicio? (Si el local es CON PROMO no tengas en cuenta la PROMO MODO)',
+          'ubicacion-senializacion-modo-titulo': '¿Donde esta ubicada la señalización MODO? (Si el local es CON PROMO no tengas en cuenta la PROMO MODO)',
+          'foto-4-titulo': 'Foto - foto amplia de línea de surtidores',
+          'linea-de-cajas-titulo': 'Surtidores',
+          'foto-5-titulo': 'Foto - Foto del surtidor'
+        },
+
+        opciones: {
+          'indica-zona-senializacion': [
+            'En Surtidores',
+            'En la vidriera del shop',
+            'Sin Señalización'
+          ],
+          'senializacion-modo-dentro-local': [
+            "SI, con Promos Bancarias",
+            "SI, otras Promos",
+            "Señalizacion Generica",
+            "Sin señalizacion"
+          ],
+          'ubicacion-senializacion-modo': [
+            'En Shop',
+            'En Surtidores',
+            'Sin Señalizacion'
+          ],
+          'ubicacion-senializacion-otras-billeteras': [
+            'En surtidores',
+            'En la vidriera/frente del shop'
+          ]
+        }
+      }
+    };
+    /*Variable global*/
+    let configuracionActual = null;
+
+    function cargarConfiguracion(tipoComercio) {
+      configuracionActual = CONFIG_PREGUNTAS[tipoComercio] || CONFIG_PREGUNTAS.COMERCIO;
+    }
+
+    function debeMostrarPregunta(idSeccion) {
+      return configuracionActual?.mostrarPreguntas[idSeccion] ?? true;
+    }
+
+    function obtenerTitulo(idTitulo) {
+      return configuracionActual?.titulos?.[idTitulo] || '';
+    }
+
+    function obtenerOpciones(nombreCampo) {
+      return configuracionActual?.opciones?.[nombreCampo] || [];
+    }
+
+    function aplicarConfiguracionCompleta() {
+      //Cambiar títulos dinámicamente
+      if (configuracionActual?.titulos) {
+        for (let [idTitulo, texto] of Object.entries(configuracionActual.titulos)) {
+          const elemento = document.getElementById(idTitulo);
+          if (elemento) {
+            elemento.textContent = texto;
+          }
+        }
+      }
+
+      //Mostrar/ocultar secciones principales
+      for (let [seccionId, _] of estadoFormulario.secciones) {
+        if (debeMostrarPregunta(seccionId)) {
+          estadoFormulario.mostrarSeccion(seccionId);
+        } else {
+          estadoFormulario.ocultarSeccion(seccionId, true);
+        }
+      }
+
+      //Ocultar elementos específicos dentro de contenedores visibles
+      if (configuracionActual?.elementosOcultos) {
+        configuracionActual.elementosOcultos.forEach(elementoId => {
+          const elemento = document.getElementById(elementoId);
+          if (elemento) {
+            elemento.classList.add('hidden');
+
+            // Remover required de campos dentro del elemento oculto
+            elemento.querySelectorAll('input[required], select[required]').forEach(campo => {
+              campo.setAttribute('data-was-required', 'true');
+              campo.removeAttribute('required');
+            });
+
+            // Deshabilitar validación de checkboxes
+            elemento.querySelectorAll('[data-requiere-check]').forEach(fieldset => {
+              const valorOriginal = fieldset.getAttribute('data-requiere-check');
+              fieldset.setAttribute('data-requiere-check-original', valorOriginal);
+              fieldset.removeAttribute('data-requiere-check');
+            });
+          }
+        });
+      }
+
+      mostrarElementosNoOcultos();
+    }
+
+    function mostrarElementosNoOcultos() {
+      // Obtener todos los IDs que deberían estar ocultos en TODAS las configs
+      const todosLosOcultos = new Set();
+      Object.values(CONFIG_PREGUNTAS).forEach(config => {
+        if (config.elementosOcultos) {
+          config.elementosOcultos.forEach(id => todosLosOcultos.add(id));
+        }
+      });
+
+      // Restaurar los que NO están en la lista actual
+      todosLosOcultos.forEach(elementoId => {
+        if (!configuracionActual?.elementosOcultos?.includes(elementoId)) {
+          const elemento = document.getElementById(elementoId);
+          if (elemento) {
+            elemento.classList.remove('hidden');
+
+            // Restaurar required
+            elemento.querySelectorAll('[data-was-required="true"]').forEach(campo => {
+              campo.setAttribute('required', 'true');
+            });
+
+            // Restaurar validación de checkboxes
+            elemento.querySelectorAll('[data-requiere-check-original]').forEach(fieldset => {
+              const valorOriginal = fieldset.getAttribute('data-requiere-check-original');
+              fieldset.setAttribute('data-requiere-check', valorOriginal);
+            });
+          }
+        }
+      });
+    }
+
+    function mostrarCasos(datosFiltrados, esResultadoFiltrado = false) {
+      try {
+        let casos = datosFiltrados.casos;
+
+        if (!esResultadoFiltrado && (!casos || casos.length === 0)) {
+          let mensajeError = document.getElementById("mensajeError");
+          mensajeError.classList.remove("hidden");
+          let bienvenidaUsuario = document.getElementById("bienvenida-usuario");
+          bienvenidaUsuario.classList.add("hidden");
+          let mostrarContenedor = document.getElementById("contenedor-formulario");
+          mostrarContenedor.classList.add("hidden");
+          return;
+        }
+
+        /*Fecha de la campaña*/
+        let fechaDeCampania = document.getElementById("fecha-de-la-campania");
+        fechaDeCampania.textContent = `La fecha de la campaña es del ${casos[0].fechaInicio} hasta ${casos[0].fechaFin}`;
+
+        /*Total casos*/
+        let totalCasos = document.getElementById("total-casos");
+        totalCasos.textContent = `Total de casos: ${casos.length}`;
+
+        /*Casos hechos*/
+        let casosHechos = 0;
+        for (let i = 0; i < casos.length; i++) {
+          if (casos[i].formularioCompletado === "SI") {
+            casosHechos++;
+          }
+        }
+        let totalCasosHechos = document.getElementById("total-casos-hechos");
+        totalCasosHechos.textContent = `Total casos hechos: ${casosHechos}`;
+
+        /*Casos para editar*/
+        let casosParaEditar = 0;
+        for (let i = 0; i < casos.length; i++) {
+          if (casos[i].paraEditar === "SI") {
+            casosParaEditar++;
+          }
+        }
+        let casosParaEditarHtml = document.getElementById("total-casos-para-editar");
+        casosParaEditarHtml.textContent = `Total casos para editar: ${casosParaEditar}`;
+
+        let contenedorCasos = document.getElementById("cartas-casos");
+        contenedorCasos.innerHTML = '';
+
+        casos.forEach(caso => {
+
+          let cardCaso = document.createElement("div");
+          cardCaso.className = "card-caso";
+
+          let cardText = document.createElement("p");
+
+          let estado = document.createElement("span");
+          estado.textContent = `${caso.formularioCompletado}`;
+          estado.className = "estado";
+
+          if (caso.promo === "CON PROMO") {
+            let texto = document.createTextNode(`${caso.idCaso} - ${caso.nombreComercio} - ${caso.direccionComercio} - Fecha inicio de promo: ${caso.fechaPromoInicio} - Fecha fin de promo: ${caso.fechaPromoFin} - Días de promo: ${caso.diasQueHayPromo} - COMPLETO: `);
+            cardText.appendChild(texto);
+            cardText.appendChild(estado);
+          } else {
+            let texto = document.createTextNode(`${caso.idCaso} - ${caso.nombreComercio} - ${caso.direccionComercio} - COMPLETO: `);
+            cardText.appendChild(texto);
+            cardText.appendChild(estado);
+          }
+
+          let contenedorBotones = document.createElement("div");
+          contenedorBotones.className = "contenedor-botones";
+
+          let botonCompletar = document.createElement("button");
+          botonCompletar.textContent = "COMPLETAR";
+          botonCompletar.id = `completar-${caso.idCaso}`;
+          botonCompletar.className = 'botonCompletar';
+          botonCompletar.onclick = () => mostrarVentanaCompletar(caso);
+          if (caso.formularioCompletado === "SI") {
+            botonCompletar.disabled = true;
+            botonCompletar.classList.add("desactivado");
+            estado.classList.add("completado");
+          }
+
+          let botonEditar = document.createElement("button");
+          botonEditar.textContent = "EDITAR";
+          botonEditar.id = `editar-${caso.idCaso}`;
+          botonEditar.className = 'botonEditar';
+          botonEditar.onclick = () => mostrarVentanaEditar(caso);
+          if (caso.paraEditar != "SI") {
+            botonEditar.disabled = true;
+            botonEditar.classList.add("desactivado");
+          }
+
+          contenedorBotones.appendChild(botonCompletar);
+          contenedorBotones.appendChild(botonEditar);
+
+          cardCaso.appendChild(cardText);
+          cardCaso.appendChild(contenedorBotones);
+
+          contenedorCasos.appendChild(cardCaso);
+        });
+      } catch (e) {
+        console.error("Mensaje error:", e);
+      }
+    }
+
+    function esArchivoImagenValido(file) {
+      // Tipos MIME válidos para imágenes
+      const tiposImagenValidos = [
+        'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
+        'image/webp', 'image/svg+xml', 'image/bmp', 'image/tiff',
+        'image/heic', 'image/heif'  // Formatos Apple
+      ];
+
+      // Extensiones válidas para imágenes (fallback)
+      const extensionesValidas = [
+        '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg',
+        '.bmp', '.tiff', '.heic', '.heif'
+      ];
+
+      // Verificar por MIME type primero
+      if (file.type && tiposImagenValidos.includes(file.type.toLowerCase())) {
+        return true;
+      }
+
+      // Si el MIME type no está disponible o no es reconocido, verificar por extensión
+      if (file.name) {
+        const extension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+        return extensionesValidas.includes(extension);
+      }
+
+      // Como último recurso, si el tipo empieza con 'image/' lo aceptamos
+      return file.type && file.type.startsWith('image/');
+    }
+
+
+    function mostrarVentanaCompletar(caso) {
+      // Eliminar cualquier modal anterior para evitar duplicados
+      let modalAnterior = document.getElementById("modal-completar");
+      if (modalAnterior) {
+        modalAnterior.remove();
+      }
+
+      // Crear el modal principal
+      let modal = document.createElement("div");
+      modal.id = "modal-completar";
+      modal.className = "modal";
+
+      let modalContenido = document.createElement("div");
+      modalContenido.className = "modal-contenido";
+
+      let cierreModal = document.createElement("span");
+      cierreModal.className = "cerrar";
+      cierreModal.textContent = "X";
+      cierreModal.onclick = () => cerrarModal("modal-completar");
+
+      let idTitulo = document.createElement("h2");
+      idTitulo.textContent = `COMPLETAR: ID - ${caso.idCaso}`;
+
+      let direccion = document.createElement("p");
+      direccion.textContent = `${caso.direccionComercio}`;
+
+      /*Agregando títulos y descripción al modal principal*/
+      modalContenido.appendChild(cierreModal);
+      modalContenido.appendChild(idTitulo);
+      modalContenido.appendChild(direccion);
+      modal.appendChild(modalContenido);
+
+      let formularioCompletar = document.createElement("form");
+      formularioCompletar.id = "formulario-completar";
+      formularioCompletar.className = "formulario";
+
+      formularioCompletar.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Validación mejorada de grupos de checkboxes
+        const grupos = this.querySelectorAll("[data-requiere-check]");
+        let valido = true;
+        let mensajeError = "";
+
+        for (let grupo of grupos) {
+          //VERIFICAR SI EL GRUPO ESTÁ VISIBLE
+          const contenedorPadre = grupo.closest('.seccion-formulario, .form-group, div[id]');
+          const estaOculto = contenedorPadre && contenedorPadre.classList.contains('hidden');
+
+          // Si está oculto, saltarlo
+          if (estaOculto) {
+            continue;
+          }
+
+          const nombreGrupo = grupo.getAttribute("data-requiere-check");
+          const checkboxes = this.querySelectorAll(`input[name="${nombreGrupo}"]`);
+          const algunoMarcado = Array.from(checkboxes).some(cb => cb.checked);
+
+          if (!algunoMarcado) {
+            mensajeError = `Debes seleccionar al menos una opción del grupo: ${nombreGrupo}`;
+            grupo.scrollIntoView({ behavior: "smooth", block: "center" });
+            valido = false;
+            break;
+          }
+        }
+
+        // Validación robusta de fotos obligatorias
+        if (valido) {
+          const fotosObligatorias = this.querySelectorAll('input[type="file"][required]');
+
+          for (let foto of fotosObligatorias) {
+            //VERIFICAR SI LA FOTO ESTÁ VISIBLE
+            const contenedorPadre = foto.closest('.seccion-formulario, .form-group, div[id]');
+            const estaOculto = contenedorPadre && contenedorPadre.classList.contains('hidden');
+
+            // Si está oculto, saltarlo
+            if (estaOculto) {
+              continue;
+            }
+
+            if (!foto.files || foto.files.length === 0 || foto.files[0].size === 0) {
+              const nombreCampo = foto.previousElementSibling?.textContent || foto.name || `Foto requerida`;
+              mensajeError = `Falta subir la foto obligatoria: ${nombreCampo}`;
+              foto.scrollIntoView({ behavior: "smooth", block: "center" });
+              valido = false;
+              break;
+            }
+
+            // Validar que sea una imagen válida
+            const file = foto.files[0];
+            if (!esArchivoImagenValido(file)) {
+              mensajeError = `El archivo ${file.name} no es una imagen válida`;
+              foto.scrollIntoView({ behavior: "smooth", block: "center" });
+              valido = false;
+              break;
+            }
+          }
+        }
+
+        if (!valido) {
+          alert(mensajeError);
+          return false;
+        }
+        // Si todo está válido, procesar fotos
+        handleUpload(caso);
+      });
+
+      modalContenido.appendChild(formularioCompletar);
+
+      cargarConfiguracion(caso.tipoComercio || 'S');
+      aplicarConfiguracionCompleta();
+
+      let estadoLocal = {
+        type: "select",
+        id: "estado-local",
+        name: "estado-local",
+        labelText: "Estado del local",
+        options: [
+          "Local Abierto", "No se ubica en la direccion indicada", "Es Inmueble Residencial",
+          "Cerrado definitivamente", "Local cerrado en horario comercial",
+          "Es Galeria/Feria no se ubica el local", "Local en Refaccion"]
+      };
+
+      let estadoLocalContenedor = crearCampoFormulario(estadoLocal);
+      formularioCompletar.appendChild(estadoLocalContenedor);
+
+      let respuestaEstadoLocalContenedor = estadoLocalContenedor.querySelector("select");
+      if (respuestaEstadoLocalContenedor) {
+        respuestaEstadoLocalContenedor.addEventListener("change", () => {
+          estadoFormulario.resetearFormulario();
+          console.log(estadoFormulario.secciones)
+
+          if (respuestaEstadoLocalContenedor.value === "Local Abierto") {
+            // Crear contenedores si no existen y mostrarlos
+            finalFormularioParte1(formularioCompletar);
+            tienePromo(formularioCompletar, caso);
+            primerFlujoNeutro(formularioCompletar, caso);
+            funcQRImpreso(formularioCompletar, caso);
+            qrMercadoPago(formularioCompletar, caso);
+            otrasBilleteras(formularioCompletar, caso);
+            conQuePuedoPagar(formularioCompletar, caso);
+            funcComoEsElProcedimiento(formularioCompletar, caso);
+            finalFormularioParte2(formularioCompletar);
+          }
+          else if (respuestaEstadoLocalContenedor.value != "Local Abierto") {
+            finalFormularioParte1(formularioCompletar);
+            finalFormularioParte2(formularioCompletar);
+          }
+        });
+      }
+
+      let botonCompletarForm = document.createElement("button");
+      botonCompletarForm.textContent = "ENVIAR";
+      botonCompletarForm.id = "boton-completar-form";
+      botonCompletarForm.type = "submit";
+      botonCompletarForm.setAttribute("form", "formulario-completar");
+      modalContenido.appendChild(botonCompletarForm);
+
+      let mensajeExito = document.createElement("p");
+      mensajeExito.id = "msg-guardado";
+      mensajeExito.className = "hidden";
+      mensajeExito.textContent = "Registro guardado con éxito!";
+      modalContenido.appendChild(mensajeExito);
+
+      let mensajeDeError = document.createElement("p");
+      mensajeDeError.id = "msg-error";
+      mensajeDeError.className = "hidden";
+      modalContenido.appendChild(mensajeDeError);
+
+      let output = document.createElement("div");
+      output.id = "output";
+      output.className = "hidden progress-output";
+      modalContenido.appendChild(output);
+
+      let statusMessage = document.createElement("p");
+      statusMessage.id = "statusMessage";
+      modalContenido.appendChild(statusMessage);
+
+      /*modal principal*/
+      document.body.appendChild(modal);
+    }
+
+    /*Principio del flujo*/
+    function tienePromo(formularioCompletar, caso) {
+      if (caso.promo === "CON PROMO") {
+
+        let tienePromoContenedor = document.getElementById("tiene-promo-contenedor");
+        if (!tienePromoContenedor) {
+          //CARGAR CONFIGURACIÓN ANTES DE CREAR ELEMENTOS
+          cargarConfiguracion(caso.tipoComercio || 'S');
+
+          tienePromoContenedor = document.createElement("div");
+          tienePromoContenedor.id = "tiene-promo-contenedor";
+          tienePromoContenedor.className = "seccion-formulario hidden";
+
+          let comercioConPromoTitle = document.createElement("h3");
+          comercioConPromoTitle.textContent = "Local con promo";
+          tienePromoContenedor.appendChild(comercioConPromoTitle);
+
+          let datosPromo = {
+            type: "select",
+            id: "pregunta-tiene-promocion",
+            name: "pregunta-tiene-promocion",
+            labelText: "Preguntar: ¿Tiene alguna promoción?",
+            options: ["SI (Ofreció Promo MODO)", "NO (No Ofreció Promo MODO)"]
+          };
+          let datosPromoContenedor = crearCampoFormulario(datosPromo);
+          tienePromoContenedor.appendChild(datosPromoContenedor);
+
+          let respuestaDatosPromo = datosPromoContenedor.querySelector("select");
+          if (respuestaDatosPromo) {
+            respuestaDatosPromo.addEventListener("change", () => {
+              // Eliminar pregunta anterior de MODO si existe
+              estadoFormulario.ocultarSeccion("pregunta-tiene-promocionModo-contenedor");
+
+              if (respuestaDatosPromo.value === "NO (No Ofreció Promo MODO)") {
+                let tieneModoContenedor = document.getElementById("pregunta-tiene-promocionModo-contenedor");
+                if (!tieneModoContenedor) {
+                  let tieneModo = {
+                    type: "select",
+                    id: "pregunta-tiene-promocionModo",
+                    name: "pregunta-tiene-promocionModo",
+                    labelText: "Preguntar: ¿Tiene alguna Promo con MODO?",
+                    options: ["SI", "NO"],
+                    idContenedor: "pregunta-tiene-promocionModo-contenedor"
+                  };
+                  let tieneModoContenedor = crearCampoFormulario(tieneModo);
+
+                  // Insertamos la pregunta de MODO ANTES de la señalización
+                  let indicaZonaSenializacionContenedor = document.getElementById("indica-zona-senializacion-contenedor");
+                  if (indicaZonaSenializacionContenedor) {
+                    tienePromoContenedor.insertBefore(tieneModoContenedor, indicaZonaSenializacionContenedor);
+                  } else {
+                    tienePromoContenedor.appendChild(tieneModoContenedor);
+                  }
+                }
+                estadoFormulario.mostrarSeccion("pregunta-tiene-promocionModo-contenedor");
+              }
+            });
+          }
+
+          let indicaZonaSenializacion = {
+            type: "check-box",
+            id: "indica-zona-senializacion",
+            name: "indica-zona-senializacion",
+            labelText: obtenerTitulo("indica-zona-senializacion-titulo") ||
+              'Indica en qué zona del local se encuentra la señalización de la promo MODO',
+            options: obtenerOpciones("indica-zona-senializacion") || [
+              "Al Ingreso", "En Pasillos/Gondolas", "En Linea de Cajas",
+              "En Surtidores (Solo para est. de serv.)", "En Shop (Solo para est. de serv.)",
+              "Sin Señalización"
+            ],
+            idContenedor: "indica-zona-senializacion-contenedor",
+            idLegend: "indica-zona-senializacion-titulo"
+          };
+          let indicaZonaSenializacionContenedor = crearCampoFormulario(indicaZonaSenializacion);
+          tienePromoContenedor.appendChild(indicaZonaSenializacionContenedor);
+
+          let fotoPromoModo = {
+            type: "file",
+            id: "foto-2",
+            name: "foto-2",
+            labelText: "Foto - Foto de la promo MODO",
+            accept: "image/*",
+            preview: true
+          };
+          let fotoPromoModoContenedor = crearCampoFormulario(fotoPromoModo);
+          tienePromoContenedor.appendChild(fotoPromoModoContenedor);
+
+
+          formularioCompletar.appendChild(tienePromoContenedor);
+        }
+
+        estadoFormulario.mostrarSeccion("tiene-promo-contenedor");
+      }
+    }
+
+    /*Sección para si tienen o si no tienen promo*/
+    function primerFlujoNeutro(formularioCompletar, caso) {
+      let primerFlujo = document.getElementById("primer-flujo-neutro");
+      if (!primerFlujo) {
+        primerFlujo = document.createElement("div");
+        primerFlujo.id = "primer-flujo-neutro";
+        primerFlujo.className = "seccion-formulario hidden";
+
+        const debeOcultarVidriera = configuracionActual?.elementosOcultos?.includes('vidriera-indica-modo-contenedor');
+        /*check-box del: Vidriera indica Se puede pagar con MODO?*/
+        if (!debeOcultarVidriera) {
+          let vidrieraIndicaModo = {
+            type: "check-box",
+            id: "vidriera-indica-modo",
+            name: "vidriera-indica-modo",
+            labelText: obtenerTitulo("vidriera-indica-modo-titulo") || '¿En la vidriera indica que se puede pagar con MODO?',
+            options: obtenerOpciones("vidriera-indica-modo") || [
+              "SI, con Promos Bancarias", "SI, otras Promos",
+              "Señalizacion Generica", "Sin señalizacion",
+              "No tiene Vidriera"
+            ],
+            idLegend: "vidriera-indica-modo-titulo",
+          };
+          let vidrieraIndicaModoContenedor = crearCampoFormulario(vidrieraIndicaModo);
+          primerFlujo.appendChild(vidrieraIndicaModoContenedor)
+        }
+
+        /*Imagén: Vidriera indica Se puede pagar con MODO? */
+        let vidrieraIndicaModoFoto = {
+          type: "file",
+          id: "foto-3",
+          name: "foto-3",
+          labelText: obtenerTitulo("foto-3-titulo") || "Foto - Se debe tomar foto de la vidriera / acceso al Local",
+          accept: "image/*",
+          preview: true
+        };
+        let vidrieraIndicaModoFotoContenedor = crearCampoFormulario(vidrieraIndicaModoFoto);
+        primerFlujo.appendChild(vidrieraIndicaModoFotoContenedor);
+
+        /*check-box del: Hay Señalizacion de MODO dentro del local?*/
+        let senializacionModoDentroLocal = {
+          type: "check-box",
+          id: "senializacion-modo-dentro-local",
+          name: "senializacion-modo-dentro-local",
+          labelText: obtenerTitulo("senializacion-modo-dentro-local-titulo") || "¿Hay señalización de MODO dentro del local? (Si el local es CON PROMO no tengas en cuenta la PROMO MODO)",
+          options: [
+            "SI, con Promos Bancarias", "SI, otras Promos",
+            "Señalizacion Generica", "Sin señalizacion"
+          ]
+        };
+        let senializacionModoDentroLocalContenedor = crearCampoFormulario(senializacionModoDentroLocal);
+        primerFlujo.appendChild(senializacionModoDentroLocalContenedor);
+
+        /*check-box del: Donde esta ubicada la señalizacion MODO??*/
+        let ubicacionSenializacionModo = {
+          type: "check-box",
+          id: "ubicacion-senializacion-modo",
+          name: "ubicacion-senializacion-modo",
+          labelText: obtenerTitulo("ubicacion-senializacion-modo-titulo") || "¿Donde esta ubicada la señalización MODO? (Si el local es CON PROMO no tengas en cuenta la PROMO MODO)",
+          options: obtenerOpciones("ubicacion-senializacion-modo") || [
+            "Pasillos/Gondolas", "En Shop (Solo para Est. de Servicio)",
+            "Sin Señalizacion"
+          ]
+        };
+        let ubicacionSenializacionModoContenedor = crearCampoFormulario(ubicacionSenializacionModo);
+        primerFlujo.appendChild(ubicacionSenializacionModoContenedor);
+
+        /*Imagén: Hay Señalizacion de MODO dentro del local? */
+        let senializacionModoDentroLocalFoto = {
+          type: "file",
+          id: "foto-4",
+          name: "foto-4",
+          labelText: obtenerTitulo("foto-4-titulo") || "Foto - Foto testigo dentro del local o de la señalización",
+          accept: "image/*",
+          preview: true
+        };
+        let senializacionModoDentroLocalFotoContenedor = crearCampoFormulario(senializacionModoDentroLocalFoto);
+        primerFlujo.appendChild(senializacionModoDentroLocalFotoContenedor);
+
+        let lineaDeCajasTitle = document.createElement("h3");
+        lineaDeCajasTitle.id = "linea-de-cajas-titulo"
+        lineaDeCajasTitle.textContent = obtenerTitulo("linea-de-cajas-titulo") || "Línea de cajas";
+        primerFlujo.appendChild(lineaDeCajasTitle);
+
+        /*Select:¿Hay POP que indique se puede pagar con MODO?*/
+        let hayPOPModo = {
+          type: "select",
+          id: "hay-POP-modo",
+          name: "hay-POP-modo",
+          labelText: "¿Hay POP que indique se puede pagar con MODO?",
+          options: [
+            "SI", "NO"
+          ]
+        };
+        let hayPOPModoContenedor = crearCampoFormulario(hayPOPModo);
+        primerFlujo.appendChild(hayPOPModoContenedor);
+        /*aclaración del select de arriba*/
+        let hayPOPModoAclaracion = document.createElement("p");
+        hayPOPModoAclaracion.textContent = "Aclaración: Incluir material de Promos bancarias con logo bien Aplicado";
+        hayPOPModoContenedor.appendChild(hayPOPModoAclaracion);
+
+        /*check-box: Tipo de POP*/
+        let tipoDePOP = {
+          type: "check-box",
+          id: "tipo-de-POP",
+          name: "tipo-de-POP",
+          labelText: "Tipo de POP",
+          options: [
+            "Con Promos Bancarias",
+            "Otras promos",
+            "POP genérico (incluir QR de MODO)",
+            "Sin señalización"
+          ]
+        };
+        let tipoDePOPContenedor = crearCampoFormulario(tipoDePOP);
+        primerFlujo.appendChild(tipoDePOPContenedor);
+
+        /*Tipo de POP Foto*/
+        let tipoDePOPFoto = {
+          type: "file",
+          id: "foto-5",
+          name: "foto-5",
+          labelText: obtenerTitulo("foto-5-titulo") || "Foto - Foto testigo línea de cajas (con o sin pop)",
+          accept: "image/*",
+          preview: true
+        };
+        let tipoDePOPFotoContenedor = crearCampoFormulario(tipoDePOPFoto);
+        primerFlujo.appendChild(tipoDePOPFotoContenedor);
+
+        formularioCompletar.appendChild(primerFlujo);
+      }
+      estadoFormulario.mostrarSeccion("primer-flujo-neutro");
+    }
+
+    /*Sección del QR Impreso*/
+    function funcQRImpreso(formularioCompletar, caso) {
+      if (caso.qrImpreso === "SI") {
+        let qrImpresoContenedor = document.getElementById("qr-impreso-contenedor");
+
+        if (!qrImpresoContenedor) {
+          qrImpresoContenedor = document.createElement("div");
+          qrImpresoContenedor.id = "qr-impreso-contenedor";
+          qrImpresoContenedor.className = "seccion-formulario hidden";
+
+          let qrImpresoTitle = document.createElement("h3");
+          qrImpresoTitle.textContent = "Local con QR impreso";
+          qrImpresoContenedor.appendChild(qrImpresoTitle);
+
+          /*Input number cantidad de cajas*/
+          let cantidadCajas = {
+            type: "number",
+            id: "cantidad-de-cajas",
+            name: "cantidad-de-cajas",
+            labelText: "Cantidad de cajas abiertas"
+          };
+          let cantidadCajasContenedor = crearCampoFormulario(cantidadCajas);
+          qrImpresoContenedor.appendChild(cantidadCajasContenedor);
+
+          /*Input number cantidad de cajas abiertas*/
+          let cantidadCajasConQR = {
+            type: "number",
+            id: "cantidad-de-cajas-con-qr",
+            name: "cantidad-de-cajas-con-qr",
+            labelText: "¿Cuántas de esas cajas tiene el QR exhibido?"
+          };
+          let cantidadCajasConQRContenedor = crearCampoFormulario(cantidadCajasConQR);
+          qrImpresoContenedor.appendChild(cantidadCajasConQRContenedor);
+
+          /*Foto cantidad de cajas*/
+          let cantidadCajasConQRFotos = {
+            type: "file",
+            id: "foto-6",
+            name: "foto-6",
+            labelText: "Foto - Panorámica del sector de cajas con QR",
+            accept: "image/*",
+            preview: true,
+          };
+          let cantidadCajasConQRFotosContenedor = crearCampoFormulario(cantidadCajasConQRFotos);
+          qrImpresoContenedor.appendChild(cantidadCajasConQRFotosContenedor);
+
+          /*QR Impreso en caja*/
+          let qrImpresoEnCaja = {
+            type: "select",
+            id: "qr-impreso-caja",
+            name: "qr-impreso-caja",
+            labelText: "QR Impreso en caja",
+            options: [
+              "Si, con logo MODO", "Si, sin logo MODO",
+              "Sin QR Impreso"
+            ]
+          };
+          let qrImpresoEnCajaContenedor = crearCampoFormulario(qrImpresoEnCaja);
+          qrImpresoContenedor.appendChild(qrImpresoEnCajaContenedor);
+
+          formularioCompletar.appendChild(qrImpresoContenedor);
+        }
+        estadoFormulario.mostrarSeccion("qr-impreso-contenedor");
+      }
+    }
+
+    /*Sección de mercado pago*/
+    function qrMercadoPago(formularioCompletar, caso) {
+      let qrMercadoPagoContenedor = document.getElementById("qr-mercado-pago-contenedor");
+
+      if (!qrMercadoPagoContenedor) {
+        qrMercadoPagoContenedor = document.createElement("div");
+        qrMercadoPagoContenedor.id = "qr-mercado-pago-contenedor";
+        qrMercadoPagoContenedor.className = "seccion-formulario hidden";
+
+        let hayQRMercadoPago = {
+          type: "select",
+          id: "hay-qr-mercado-pago",
+          name: "hay-qr-mercado-pago",
+          labelText: "¿Hay QR de Mercado Pago?",
+          options: ["SI", "NO"]
+        };
+        let hayQRMercadoPagoContenedor = crearCampoFormulario(hayQRMercadoPago);
+        qrMercadoPagoContenedor.appendChild(hayQRMercadoPagoContenedor);
+
+        let selectQr = hayQRMercadoPagoContenedor.querySelector("select");
+        if (selectQr) {
+          selectQr.addEventListener("change", () => {
+            let selectOtras = document.getElementById("hay-senializacion-otras-billeteras");
+            if (selectQr.value === "SI" && selectOtras) {
+              selectOtras.value = "SI";
+              selectOtras.dispatchEvent(new Event("change"));
+            }
+            else if (selectQr.value === "NO" && selectOtras) {
+              selectOtras.value = "";
+              estadoFormulario.ocultarSeccion("contenedor-interno-otras-billeteras", true);
+            }
+          });
+        }
+
+        formularioCompletar.appendChild(qrMercadoPagoContenedor);
+      }
+
+      estadoFormulario.mostrarSeccion("qr-mercado-pago-contenedor");
+    }
+
+    function otrasBilleteras(formularioCompletar, caso) {
+      let otrasBilleterasContenedor = document.getElementById("otras-billeteras-contenedor");
+
+      if (!otrasBilleterasContenedor) {
+        otrasBilleterasContenedor = document.createElement("div");
+        otrasBilleterasContenedor.id = "otras-billeteras-contenedor";
+        otrasBilleterasContenedor.className = "seccion-formulario hidden";
+
+        let haySenializacionOtrasBilleteras = {
+          type: "select",
+          id: "hay-senializacion-otras-billeteras",
+          name: "hay-senializacion-otras-billeteras",
+          labelText: "¿Hay señalización de otras billeteras virtuales? (Incluido Mercado Pago)",
+          options: ["SI", "NO"]
+        };
+        let haySenializacionOtrasBilleterasContenedor = crearCampoFormulario(haySenializacionOtrasBilleteras);
+        otrasBilleterasContenedor.appendChild(haySenializacionOtrasBilleterasContenedor);
+
+        let respuestaHaySenializacionOtrasBilleteras = haySenializacionOtrasBilleterasContenedor.querySelector("select");
+        if (respuestaHaySenializacionOtrasBilleteras) {
+          respuestaHaySenializacionOtrasBilleteras.addEventListener("change", () => {
+
+            if (respuestaHaySenializacionOtrasBilleteras.value === "SI") {
+              estadoFormulario.mostrarSeccion("contenedor-interno-otras-billeteras");
+            } else {
+              estadoFormulario.ocultarSeccion("contenedor-interno-otras-billeteras", true);
+            }
+          });
+        }
+
+        // Crear contenedor interno UNA SOLA VEZ
+        let contenedorInterno = document.createElement("div");
+        contenedorInterno.id = "contenedor-interno-otras-billeteras";
+        contenedorInterno.className = "seccion-formulario hidden";
+
+        let tipoSenializacionOtrasBilleteras = {
+          type: "check-box",
+          id: "tipo-senializacion-otras-billeteras",
+          name: "tipo-senializacion-otras-billeteras",
+          labelText: "Tipo de señalización de las otras billeteras",
+          options: ["Generico", "QR", "Otros"]
+        };
+        let tipoSenializacionOtrasBilleterasContenedor = crearCampoFormulario(tipoSenializacionOtrasBilleteras);
+        contenedorInterno.appendChild(tipoSenializacionOtrasBilleterasContenedor);
+
+        let ubicacionSenializacionOtrasBilleteras = {
+          type: "check-box",
+          id: "ubicacion-senializacion-otras-billeteras",
+          name: "ubicacion-senializacion-otras-billeteras",
+          labelText: "¿Dónde se encuentran ubicadas?",
+          options: obtenerOpciones("ubicacion-senializacion-otras-billeteras") || ["Al Ingreso", "En Pasillos/Gondolas", "En Cajas", "En Shop (Solo Est. de Servicio)"]
+        };
+        let ubicacionSenializacionOtrasBilleterasContenedor = crearCampoFormulario(ubicacionSenializacionOtrasBilleteras);
+        contenedorInterno.appendChild(ubicacionSenializacionOtrasBilleterasContenedor);
+
+        let indicarBilleterasSenializadas = {
+          type: "check-box",
+          id: "indicar-billeteras-senializadas",
+          name: "indicar-billeteras-senializadas",
+          labelText: "Indicar las billeteras señalizadas",
+          options: ["Mercado Pago", "Personal Pay", "BNA+"],
+          incluirOtro: true
+        };
+        let indicarBilleterasSenializadasContenedor = crearCampoFormulario(indicarBilleterasSenializadas);
+        contenedorInterno.appendChild(indicarBilleterasSenializadasContenedor);
+
+        let aclaracionBilleterasSenializadas = document.createElement("p");
+        aclaracionBilleterasSenializadas.textContent = "Si hay más de un tipo de billetera separe por coma (','). Ej: Úala, Cuenta DNI"
+        contenedorInterno.appendChild(aclaracionBilleterasSenializadas);
+
+        otrasBilleterasContenedor.appendChild(contenedorInterno);
+        formularioCompletar.appendChild(otrasBilleterasContenedor);
+      }
+
+      estadoFormulario.mostrarSeccion("otras-billeteras-contenedor");
+    }
+
+    /*Preguntar: con que puedo pagar? Menciona a Modo - No menciona a Modo*/
+    /*Función con dos funciones dentro, para los dos flujos de respuesta*/
+    function conQuePuedoPagar(formularioCompletar, caso) {
+
+      let conQuePuedoPagarContenedor = document.getElementById("con-que-puedo-pagar-contenedor");
+      if (!conQuePuedoPagarContenedor) {
+        conQuePuedoPagarContenedor = document.createElement("div")
+        conQuePuedoPagarContenedor.id = "con-que-puedo-pagar-contenedor";
+        conQuePuedoPagarContenedor.className = "seccion-formulario hidden"
+
+        /*Foto Mercado Pago o otra billetera*/
+        let billeterasVirtualesFoto = {
+          type: "file",
+          id: "foto-7",
+          name: "foto-7",
+          labelText: "Foto - Mercado Pago u otras billeteras",
+          accept: "image/*",
+          preview: true,
+          required: false
+        };
+        let billeterasVirtualesFotoContenedor = crearCampoFormulario(billeterasVirtualesFoto);
+        conQuePuedoPagarContenedor.appendChild(billeterasVirtualesFotoContenedor);
+
+        let conQueBilleteraPuedoPagar = {
+          type: "select",
+          id: "con-que-billetera-puedo-pagar",
+          name: "con-que-billetera-puedo-pagar",
+          labelText: "Preguntar: ¿Con qué puedo pagar?",
+          options: [
+            "Menciono MODO",
+            "No menciono MODO"
+          ]
+        }
+        let conQueBilleteraPuedoPagarContenedor = crearCampoFormulario(conQueBilleteraPuedoPagar);
+        conQuePuedoPagarContenedor.appendChild(conQueBilleteraPuedoPagarContenedor);
+        formularioCompletar.appendChild(conQuePuedoPagarContenedor);
+        /*fin de la pregunta*/
+
+        let respuestaConQuePuedoPagar = conQueBilleteraPuedoPagarContenedor.querySelector("select");
+        if (respuestaConQuePuedoPagar) {
+          respuestaConQuePuedoPagar.addEventListener("change", () => {
+            estadoFormulario.ocultarSeccion("menciono-modo");
+            estadoFormulario.ocultarSeccion("no-menciono-modo");
+
+            if (respuestaConQuePuedoPagar.value === "Menciono MODO") {
+              mencionoModo(conQuePuedoPagarContenedor, caso);
+            }
+            else if (respuestaConQuePuedoPagar.value === "No menciono MODO") {
+              noMencionoModo(conQuePuedoPagarContenedor, caso);
+            }
+          });
+        }
+      }
+
+      estadoFormulario.mostrarSeccion("con-que-puedo-pagar-contenedor");
+    }
+
+    function mencionoModo(conQuePuedoPagarContenedor, caso) {
+      let mencionoModoContenedor = document.getElementById("menciono-modo");
+      if (!mencionoModoContenedor) {
+        mencionoModoContenedor = document.createElement("div");
+        mencionoModoContenedor.id = "menciono-modo";
+
+        let mencionoOtrasBilleteras = {
+          type: "text",
+          id: "menciono-otras-billeteras",
+          name: "menciono-otras-billeteras",
+          labelText: "¿Menciono otras billeteras virtuales?¿Cuáles?",
+        }
+        mencionoOtrasBilleterasContenedor = crearCampoFormulario(mencionoOtrasBilleteras);
+        mencionoModoContenedor.appendChild(mencionoOtrasBilleterasContenedor);
+
+        let sePuedePagarConModo = {
+          type: "select",
+          id: "se-puede-pagar-con-modo",
+          name: "se-puede-pagar-con-modo",
+          labelText: "¿Se puede pagar con MODO?",
+          options: ["SI", "NO"]
+        }
+        sePuedePagarConModoContenedor = crearCampoFormulario(sePuedePagarConModo);
+        mencionoModoContenedor.appendChild(sePuedePagarConModoContenedor);
+
+        let respuestaSePuedePagarConModeContenedor = sePuedePagarConModoContenedor.querySelector("select");
+        if (respuestaSePuedePagarConModeContenedor) {
+          respuestaSePuedePagarConModeContenedor.addEventListener("change", () => {
+            estadoFormulario.ocultarSeccion("como-te-cobran-menciono-contenedor");
+            estadoFormulario.ocultarSeccion("porque-no-se-puede-pagar-menciono-contenedor");
+
+            if (respuestaSePuedePagarConModeContenedor.value === "SI") {
+              funcComoTeCobran(sePuedePagarConModoContenedor, "menciono");
+            }
+            else if (respuestaSePuedePagarConModeContenedor.value === "NO") {
+              funcPorqueNoSePuedePagar(sePuedePagarConModoContenedor, "menciono");
+            }
+          })
+        }
+        conQuePuedoPagarContenedor.appendChild(mencionoModoContenedor);
+      }
+      estadoFormulario.mostrarSeccion("menciono-modo")
+    }
+
+    function noMencionoModo(conQuePuedoPagarContenedor, caso) {
+      let noMencionoModoContenedor = document.getElementById("no-menciono-modo");
+      if (!noMencionoModoContenedor) {
+        noMencionoModoContenedor = document.createElement("div");
+        noMencionoModoContenedor.id = "no-menciono-modo";
+
+        let queBilleterasMenciono = {
+          type: "text",
+          id: "que-billeteras-menciono",
+          name: "que-billeteras-menciono",
+          labelText: "¿Qué billeteras menciono?",
+        }
+        queBilleterasMencionoContenedor = crearCampoFormulario(queBilleterasMenciono);
+        noMencionoModoContenedor.appendChild(queBilleterasMencionoContenedor);
+
+        let sePuedeComprarConModo = {
+          type: "select",
+          id: "se-puede-comprar-con-modo",
+          name: "se-puede-comprar-con-modo",
+          labelText: "¿Se puede hacer la compra con MODO?",
+          options: ["SI", "NO"]
+        }
+        sePuedeComprarConModoContenedor = crearCampoFormulario(sePuedeComprarConModo);
+        noMencionoModoContenedor.appendChild(sePuedeComprarConModoContenedor);
+
+        let respuestaSePuedeComprarConModoContenedor = sePuedeComprarConModoContenedor.querySelector("select");
+        if (respuestaSePuedeComprarConModoContenedor) {
+          respuestaSePuedeComprarConModoContenedor.addEventListener("change", () => {
+            estadoFormulario.ocultarSeccion("como-te-cobran-no-menciono-contenedor");
+            estadoFormulario.ocultarSeccion("porque-no-se-puede-pagar-no-menciono-contenedor");
+
+            if (respuestaSePuedeComprarConModoContenedor.value === "SI") {
+              funcComoTeCobran(sePuedeComprarConModoContenedor, "no-menciono");
+            }
+            else if (respuestaSePuedeComprarConModoContenedor.value === "NO") {
+              funcPorqueNoSePuedePagar(sePuedeComprarConModoContenedor, "no-menciono");
+            }
+          })
+        }
+
+        conQuePuedoPagarContenedor.appendChild(noMencionoModoContenedor);
+      }
+
+      estadoFormulario.mostrarSeccion("no-menciono-modo");
+    }
+
+    function funcComoTeCobran(contenedor, flujo) {
+      let comoTeCobranContenedor = document.getElementById(`como-te-cobran-${flujo}-contenedor`);
+      if (!comoTeCobranContenedor) {
+        comoTeCobranContenedor = document.createElement("div");
+        comoTeCobranContenedor.id = `como-te-cobran-${flujo}-contenedor`;
+
+        let preguntaComoTeCobran = {
+          type: "select",
+          id: "pregunta-como-te-cobran",
+          name: "pregunta-como-te-cobran",
+          labelText: "¿Cómo cobran?",
+          options: [
+            "QR Impreso", "QR POS", "QR PC",
+            "QR Mercado Pago", "QR otro dispositivo",
+            "Otro QR"
+          ]
+        }
+        let preguntaComoTeCobranContenedor = crearCampoFormulario(preguntaComoTeCobran);
+        comoTeCobranContenedor.appendChild(preguntaComoTeCobranContenedor);
+
+        let hicisteLaCompra = {
+          type: "select",
+          id: "hiciste-la-compra",
+          name: "hiciste-la-compra",
+          labelText: "¿Hiciste la compra?",
+          options: [
+            "SI", "NO, por monto elevado"
+          ]
+        };
+        let hicisteLaCompraContenedor = crearCampoFormulario(hicisteLaCompra);
+        comoTeCobranContenedor.appendChild(hicisteLaCompraContenedor);
+
+        let incluirTicket = {
+          type: "file",
+          id: "foto-8",
+          name: "foto-8",
+          labelText: "Incluir el ticket",
+          accept: "image/*",
+          preview: true,
+          required: false
+        };
+        let incluirTicketContenedor = crearCampoFormulario(incluirTicket);
+        comoTeCobranContenedor.appendChild(incluirTicketContenedor);
+
+        let preguntaComoTeCobranFoto = {
+          type: "file",
+          id: "foto-9",
+          name: "foto-9",
+          labelText: "Foto - Tomar foto del QR",
+          accept: "image/*",
+          preview: true,
+          required: false
+        }
+        let preguntaComoTeCobranFotoContenedor = crearCampoFormulario(preguntaComoTeCobranFoto);
+        comoTeCobranContenedor.appendChild(preguntaComoTeCobranFotoContenedor);
+
+        contenedor.appendChild(comoTeCobranContenedor);
+      }
+      estadoFormulario.mostrarSeccion(`como-te-cobran-${flujo}-contenedor`)
+    }
+
+    function funcPorqueNoSePuedePagar(contenedor, flujo) {
+      let porqueNoSePuedePagarContenedor = document.getElementById(`porque-no-se-puede-pagar-${flujo}-contenedor`);
+      if (!porqueNoSePuedePagarContenedor) {
+        porqueNoSePuedePagarContenedor = document.createElement("div");
+        porqueNoSePuedePagarContenedor.id = `porque-no-se-puede-pagar-${flujo}-contenedor`;
+
+        let noSePuedePagarConModo = {
+          type: "select",
+          id: "no-se-puede-pagar-con-modo",
+          name: "no-se-puede-pagar-con-modo",
+          labelText: "No se puede pagar con MODO porque:",
+          options: [
+            "No acepta MODO", "Dejo de aceptar por incovenientes",
+            "Problemas con la App", "Problemas con QR/PC/POS"
+          ]
+        };
+        let noSePuedePagarConModoContenedor = crearCampoFormulario(noSePuedePagarConModo);
+        porqueNoSePuedePagarContenedor.appendChild(noSePuedePagarConModoContenedor);
+
+        contenedor.appendChild(porqueNoSePuedePagarContenedor);
+      }
+      estadoFormulario.mostrarSeccion(`porque-no-se-puede-pagar-${flujo}-contenedor`)
+    }
+
+    function funcComoEsElProcedimiento(formularioCompletar) {
+      let comoEsElProcedimientoContenedor = document.getElementById("como-es-el-procedimiento-contenedor");
+      if (!comoEsElProcedimientoContenedor) {
+        comoEsElProcedimientoContenedor = document.createElement("div");
+        comoEsElProcedimientoContenedor.id = "como-es-el-procedimiento-contenedor";
+        comoEsElProcedimientoContenedor.className = "seccion-formulario hidden";
+
+        let comoEsElProcedimientoDePago = {
+          type: "select",
+          id: "como-es-el-procedimiento-de-cobro",
+          name: "como-es-el-procedimiento-de-cobro",
+          labelText: "¿Cómo es el procedimiento de cobro?",
+          options: [
+            "Correcto", "Incorrecto (QR Mercado Pago)",
+          ]
+        };
+        let comoEsElProcedimientoDePagoContenedor = crearCampoFormulario(comoEsElProcedimientoDePago)
+        comoEsElProcedimientoContenedor.appendChild(comoEsElProcedimientoDePagoContenedor);
+
+        let haySenializacionDePromosBancarias = {
+          type: "select",
+          id: "hay-senializacion-de-promos-bancarias",
+          name: "hay-senializacion-de-promos-bancarias",
+          labelText: "¿Hay señalización de promos bancarias? (Con o sin MODO)",
+          options: [
+            "SI", "NO"
+          ]
+        }
+        let haySenializacionDePromosBancariasContenedor = crearCampoFormulario(haySenializacionDePromosBancarias);
+        comoEsElProcedimientoContenedor.appendChild(haySenializacionDePromosBancariasContenedor);
+
+        let respuestaHaySenializacionDePromosBancarias = haySenializacionDePromosBancariasContenedor.querySelector("select");
+        if (respuestaHaySenializacionDePromosBancarias) {
+          respuestaHaySenializacionDePromosBancarias.addEventListener("change", () => {
+            estadoFormulario.ocultarSeccion("diferentes-promos-bancarias-contenedor");
+
+            if (respuestaHaySenializacionDePromosBancarias.value === "SI") {
+              funcDiferentesPromosBancarias(comoEsElProcedimientoContenedor);
+            }
+          });
+        }
+
+        formularioCompletar.appendChild(comoEsElProcedimientoContenedor);
+      }
+
+      estadoFormulario.mostrarSeccion("como-es-el-procedimiento-contenedor");
+    }
+
+    function funcDiferentesPromosBancarias(contenedor) {
+      let diferentesPromosBancariasContenedor = document.getElementById("diferentes-promos-bancarias-contenedor");
+      if (!diferentesPromosBancariasContenedor) {
+        diferentesPromosBancariasContenedor = document.createElement("div");
+        diferentesPromosBancariasContenedor.id = "diferentes-promos-bancarias-contenedor";
+
+        let tituloSenializacionDePromosBancarias = document.createElement("h3");
+        tituloSenializacionDePromosBancarias.textContent = "Señalizacion Promos Bancarias";
+        diferentesPromosBancariasContenedor.appendChild(tituloSenializacionDePromosBancarias);
+
+        let indicarBancosConPromoModo = {
+          type: "check-box",
+          id: "indicar-bancos-con-promo-modo",
+          name: "indicar-bancos-con-promo-modo",
+          labelText: "Indicar los bancos CON promo MODO",
+          options: [
+            "Bancor", "BBVA", "BICA",
+            "BPN", "Ciudad", "Coinag",
+            "Columbia", "Comafi", "Corrientes",
+            "Credicoop", "Banco del Sol", "Dino",
+            "Entre Rios", "Galicia", "Hipotecario",
+            "HSBC", "ICBC", "Iudu",
+            "Macro", "Macro BMA", "Meridian",
+            "Municipal de Rosario", "Nación", "Naranja X",
+            "Patagonia", "Piano", "San Juan",
+            "Santa Cruz", "Santa Fe", "Santander",
+            "Supervielle", "No hay"
+          ]
+        }
+        let indicarBancosConPromoModoContenedor = crearCampoFormulario(indicarBancosConPromoModo);
+        diferentesPromosBancariasContenedor.appendChild(indicarBancosConPromoModoContenedor);
+
+        let indicarBancosSinPromoModo = {
+          type: "check-box",
+          id: "indicar-bancos-sin-promo-modo",
+          name: "indicar-bancos-sin-promo-modo",
+          labelText: "Indicar los bancos SIN promo MODO",
+          options: [
+            "Bancor", "BBVA", "BICA",
+            "BPN", "Ciudad", "Coinag",
+            "Columbia", "Comafi", "Corrientes",
+            "Credicoop", "Banco del Sol", "Dino",
+            "Entre Rios", "Galicia", "Hipotecario",
+            "HSBC", "ICBC", "Iudu",
+            "Macro", "Macro BMA", "Meridian",
+            "Municipal de Rosario", "Nación", "Naranja X",
+            "Patagonia", "Piano", "San Juan",
+            "Santa Cruz", "Santa Fe", "Santander",
+            "Supervielle", "No hay"
+          ]
+        }
+        let indicarBancosSinPromoModoContenedor = crearCampoFormulario(indicarBancosSinPromoModo);
+        diferentesPromosBancariasContenedor.appendChild(indicarBancosSinPromoModoContenedor);
+
+        let testigoPromoBancarias = {
+          type: "file",
+          id: "foto-10",
+          name: "foto-10",
+          labelText: "Foto - foto testigo promos bancarias (con o sin modo)",
+          accept: "image/*",
+          preview: true
+        };
+        let testigoPromoBancariasContenedor = crearCampoFormulario(testigoPromoBancarias);
+        diferentesPromosBancariasContenedor.appendChild(testigoPromoBancariasContenedor);
+
+        contenedor.appendChild(diferentesPromosBancariasContenedor);
+      }
+      estadoFormulario.mostrarSeccion("diferentes-promos-bancarias-contenedor");
+    }
+
+
+    /*INICIO - Última parte del formulario del modal*/
+    function finalFormularioParte1(formulario) {
+      let ultimoContenedorParte1 = document.getElementById("ultimo-contenedor-1");
+
+      if (!ultimoContenedorParte1) {
+        let ultimoContenedorParte1 = document.createElement("div");
+        ultimoContenedorParte1.id = "ultimo-contenedor-1";
+
+        let imagenLocal = {
+          type: "file",
+          id: "foto-1",
+          labelText: "Foto - Frente del local (fachada)",
+          accept: "image/*",
+          preview: true
+        };
+        let imagenLocalContenedor = crearCampoFormulario(imagenLocal);
+        ultimoContenedorParte1.appendChild(imagenLocalContenedor);
+
+        formulario.appendChild(ultimoContenedorParte1);
+      }
+
+      estadoFormulario.mostrarSeccion("ultimo-contenedor-1");
+    }
+
+    function finalFormularioParte2(formulario) {
+      let ultimoContenedorParte2 = document.getElementById("ultimo-contenedor-2");
+
+      if (!ultimoContenedorParte2) {
+        ultimoContenedorParte2 = document.createElement("div");
+        ultimoContenedorParte2.id = "ultimo-contenedor-2";
+        ultimoContenedorParte2.className = "seccion-formulario"; // Sin hidden, siempre visible
+
+        let observaciones = {
+          type: "text",
+          id: "observaciones",
+          name: "observaciones",
+          labelText: "Observaciones/Aclaraciones - Si no hay observaciones, por favor, colocar un punto('.').",
+        }
+
+        let observacionesContenedor = crearCampoFormulario(observaciones);
+        ultimoContenedorParte2.appendChild(observacionesContenedor);
+
+        formulario.appendChild(ultimoContenedorParte2);
+      } else {
+        formulario.appendChild(ultimoContenedorParte2);
+      }
+
+      estadoFormulario.mostrarSeccion("ultimo-contenedor-2");
+      return ultimoContenedorParte2;
+    }
+
+    /*FIN - Última parte del formulario del modal*/
+    function enviarAuditoriaFinal(fotosSubidas, caso) {
+      const datos = {
+        datosCaso: caso,
+        imagenes: fotosSubidas,
+        estadoLocal: getInputValue("estado-local"),
+        preguntaTieneAlgunaPromocion: getInputValue("pregunta-tiene-promocion"),
+        preguntaTienePromoModo: getInputValue("pregunta-tiene-promocionModo"),
+        senializacionPromoModo: obtenerValoresCheckbox("indica-zona-senializacion"),
+        vidrieraIndicaPuedePagarModo: obtenerValoresCheckbox("vidriera-indica-modo"),
+        haySenializacionModoDentroLocal: obtenerValoresCheckbox("senializacion-modo-dentro-local"),
+        ubicacionSenalizacionModo: obtenerValoresCheckbox("ubicacion-senializacion-modo"),
+        hayPopModo: getInputValue("hay-POP-modo"),
+        tipoDePop: obtenerValoresCheckbox("tipo-de-POP"),
+        cantidadDeCajas: getInputValue("cantidad-de-cajas"),
+        cantidadCajasConQR: getInputValue("cantidad-de-cajas-con-qr"),
+        qrImpresoEnCaja: getInputValue("qr-impreso-caja"),
+        hayQRMercadoPago: getInputValue("hay-qr-mercado-pago"),
+        haySenializacionDeOtrasBilleteras: getInputValue("hay-senializacion-otras-billeteras"),
+        tipoSenializacionOtrasBilleteras: obtenerValoresCheckbox("tipo-senializacion-otras-billeteras"),
+        ubicacionSenializacionOtrasBilleteras: obtenerValoresCheckbox("ubicacion-senializacion-otras-billeteras"),
+        indicarBilleterasSenializadas: obtenerValoresCheckbox("indicar-billeteras-senializadas"),
+        conQueBilleteraPuedoPagar: getInputValue("con-que-billetera-puedo-pagar"),
+        mencionoOtrasBilleteras: getInputValue("menciono-otras-billeteras"),
+        sePuedeComprarConModo: getInputValue("se-puede-comprar-con-modo"),
+        queBilleterasMenciono: getInputValue("que-billeteras-menciono"),
+        sePuedePagarConModo: getInputValue("se-puede-pagar-con-modo"),
+        preguntaComoTeCobran: getInputValue("pregunta-como-te-cobran"),
+        noSePuedePagarConModo: getInputValue("no-se-puede-pagar-con-modo"),
+        hicisteLaCompra: getInputValue("hiciste-la-compra"),
+        comoEsElProcedimientoDeCobro: getInputValue("como-es-el-procedimiento-de-cobro"),
+        haySenializacionDePromosBancarias: getInputValue("hay-senializacion-de-promos-bancarias"),
+        indicarBancosConPromoModo: obtenerValoresCheckbox("indicar-bancos-con-promo-modo"),
+        indicarBancosSinPromoModo: obtenerValoresCheckbox("indicar-bancos-sin-promo-modo"),
+        observaciones: getInputValue("observaciones")
+      };
+
+      let botonCompletar = document.getElementById("boton-completar-form");
+      botonCompletar.disabled = true;
+      botonCompletar.textContent = "GUARDANDO...";
+
+      google.script.run
+        .withSuccessHandler(res => {
+          console.log("✅ Auditoría guardada", res);
+          document.getElementById('statusMessage').textContent = "Formulario enviado correctamente.";
+          document.getElementById("formulario-completar").reset();
+
+          setTimeout(() => {
+            botonCompletar.textContent = "ENVIADO";
+            botonCompletar.disabled = true;
+            cerrarModal("modal-completar");
+            cargarCasos()
+          }, 1000);
+        })
+        .withFailureHandler(err => {
+          console.error("Error al guardar auditoría:", err);
+          document.getElementById('statusMessage').textContent = "Error al enviar formulario.";
+          botonCompletar.disabled = false;
+          botonCompletar.textContent = "ENVIAR";
+        })
+        .guardarAuditoria(datos);
+    }
+
+    /*-------------SECCIÓN-"EDITAR"---------------*/
+    async function mostrarVentanaEditar(caso) { // 💡 Convertida a async
+      let modalAnterior = document.getElementById("modal-editar");
+      if (modalAnterior) {
+        modalAnterior.remove();
+      }
+
+      // --- 1. CREAR MODAL BÁSICO CON MENSAJE DE CARGA ---
+      let modalEditar = document.createElement("div");
+      modalEditar.id = "modal-editar";
+      modalEditar.className = "modal";
+
+      let modalContenido = document.createElement("div");
+      modalContenido.className = "modal-contenido";
+
+      let cierreModal = document.createElement("span");
+      cierreModal.className = "cerrar";
+      cierreModal.textContent = "X";
+      cierreModal.onclick = () => cerrarModal("modal-editar");
+
+      let idTitulo = document.createElement("h2");
+      idTitulo.textContent = `EDITAR: ID - ${caso.idCaso}`;
+
+      let direccion = document.createElement("p");
+      direccion.textContent = `${caso.direccionComercio}`;
+
+      // Añadir mensaje de carga de datos/fila
+      let mensajeCargando = document.createElement("p");
+      mensajeCargando.id = "mensaje-cargando-fila";
+      mensajeCargando.textContent = "Cargando datos de edición, por favor espere...";
+
+      modalContenido.appendChild(cierreModal);
+      modalContenido.appendChild(idTitulo);
+      modalContenido.appendChild(direccion);
+      modalContenido.appendChild(mensajeCargando); // Mostrar mensaje de carga
+      modalEditar.appendChild(modalContenido);
+      document.body.appendChild(modalEditar);
+
+      // --- 2. LLAMAR AL SERVIDOR PARA OBTENER EL NÚMERO DE FILA ---
+      try {
+        const numeroFila = await new Promise((resolve, reject) => {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)
+            .buscarFilaPorId(caso.idCaso); // Llama a la nueva función del servidor
+        });
+
+        if (!numeroFila) {
+          alert("Error: No se encontró el registro en la hoja de formularios (NewFormulario) para edición.");
+          cerrarModal("modal-editar");
+          return;
+        }
+
+        // 💡 CLAVE: Adjuntar el número de fila al objeto caso
+        caso.fila = numeroFila;
+        mensajeCargando.remove(); // Quitar el mensaje de carga
+
+      } catch (err) {
+        alert("Error al obtener la fila para edición: " + err.message);
+        cerrarModal("modal-editar");
+        return;
+      }
+
+      // --- 3. CONSTRUCCIÓN DEL FORMULARIO Y BOTONES (Una vez que tenemos la fila) ---
+
+      let formularioEditar = document.createElement("form");
+      formularioEditar.id = "formulario-editar";
+      formularioEditar.className = "formulario";
+
+      // Modificar el listener para usar el 'caso' con la fila adjunta
+      formularioEditar.addEventListener("submit", function (e) {
+        e.preventDefault(); // evitamos envío por defecto
+        // 💡 handleUploadEditar recibirá el caso.fila
+        handleUploadEditar(caso);
+      });
+
+      let fotosParaEditar = {
+        fotoParaEditar1: "Foto - Frente del local (fachada)",
+        fotoParaEditar2: "Foto - Foto de la promo",
+        fotoParaEditar3: "Foto - Se debe tomar foto de la vidriera / acceso al Local",
+        fotoParaEditar4: "Foto - Foto testigo dentro del local o señalización",
+        fotoParaEditar5: "Foto - Foto testigo línea de cajas (con o sin pop)",
+        fotoParaEditar6: "Foto - Panorámica del sector de cajas con QR",
+        fotoParaEditar7: "Foto - Mercado Pago u otras billeteras",
+        fotoParaEditar8: "Foto - Foto del ticket",
+        fotoParaEditar9: "Foto - Foto de como te cobran",
+        fotoParaEditar10: "Foto - Foto testigo promos bancarias (con o sin modo)",
+      };
+
+      if (caso.paraEditar === "SI") {
+        const containerFotosEditar = document.createElement("div");
+        containerFotosEditar.id = "container-fotos-editar";
+        formularioEditar.appendChild(containerFotosEditar);
+
+        for (let i = 1; i <= 10; i++) {
+          if (caso[`fotoEditar${i}`] === "SI") {
+            let clave = `fotoParaEditar${i}`;
+            let configuracionFotosEditar = {
+              type: "file",
+              id: `foto-editar-${i}`,
+              labelText: fotosParaEditar[clave],
+              accept: "image/*",
+              preview: true,
+              required: false
+            };
+
+            // Asumo que crearCampoFormulario está definida en tu código
+            let configuracionFotosEditarContainer = crearCampoFormulario(configuracionFotosEditar);
+            containerFotosEditar.appendChild(configuracionFotosEditarContainer);
+          }
+        }
+      }
+
+      modalContenido.appendChild(formularioEditar);
+
+      let botonEditarForm = document.createElement("button");
+      botonEditarForm.textContent = "Editar";
+      botonEditarForm.id = "boton-editar-form";
+      botonEditarForm.type = "submit";
+      botonEditarForm.setAttribute("form", "formulario-editar");
+      modalContenido.appendChild(botonEditarForm);
+
+      let mensajeExitoEditar = document.createElement("p");
+      mensajeExitoEditar.id = "msg-guardado-editar";
+      mensajeExitoEditar.className = "hidden";
+      mensajeExitoEditar.textContent = "Registro editado con éxito!";
+      modalContenido.appendChild(mensajeExitoEditar);
+
+      let outputEditar = document.createElement("div");
+      outputEditar.id = "outputEditar";
+      outputEditar.className = "hidden progress-output";
+      modalContenido.appendChild(outputEditar);
+
+      // modalEditar ya está en el body y visible desde el paso 1
+    }
+
+    /*-------------FUNCIONES-AUXILIARES---------------*/
+    /**
+   * Crea un campo de formulario dinámico con soporte mejorado para inputs de tipo file
+   * @param {Object} config - Configuración del campo
+   * @param {string} config.type - Tipo de input (text, file, select, check-box)
+   * @param {string} config.id - ID del campo
+   * @param {string} [config.name] - Name del campo (opcional, usa id por defecto)
+   * @param {string} config.labelText - Texto del label
+   * @param {Array} [config.options] - Opciones para select/checkbox
+   * @param {string} [config.className] - Clase CSS del contenedor
+   * @param {string} [config.idContenedor] - ID del contenedor
+   * @param {boolean} [config.incluirOtro] - Incluir opción "Otro" en checkbox
+   * @param {boolean} [config.required] - Si el campo es requerido
+   * @param {string} [config.accept] - Tipos de archivo aceptados (para type=file)
+   * @param {boolean} [config.preview] - Mostrar previsualización para imágenes
+   * @returns {HTMLElement} Elemento del campo creado
+   */
+    function crearCampoFormulario({
+      type = "text",
+      id,
+      name,
+      labelText,
+      options = [],
+      className = "form-group",
+      idContenedor,
+      incluirOtro = false,
+      required = true,
+      accept = "",
+      preview = false,
+      idLegend = null
+    }) {
+      const contenedor = document.createElement("div");
+      contenedor.className = className;
+      if (idContenedor) {
+        contenedor.id = idContenedor;
+      } else {
+        contenedor.id = `${id}-contenedor`;
+      }
+
+      if (type === "check-box" && options.length > 0) {
+        const fieldset = document.createElement("fieldset");
+        fieldset.className = "checkbox-group";
+        fieldset.id = `${id}-fieldset`; // ✅ NUEVO: ID al fieldset para referencia
+
+        const legend = document.createElement("legend");
+        if (idLegend) {
+          legend.id = idLegend;
+        }
+        legend.textContent = labelText;
+        fieldset.appendChild(legend);
+
+        options.forEach((opcionTexto, index) => {
+          const div = document.createElement("div");
+
+          const checkboxId = `${id}_${index}`;
+          const label = document.createElement("label");
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.id = checkboxId;
+          checkbox.name = name || id;
+          checkbox.value = opcionTexto;
+          fieldset.setAttribute("data-requiere-check", name || id);
+
+          label.appendChild(checkbox);
+          label.append(` ${opcionTexto}`);
+          div.appendChild(label);
+          fieldset.appendChild(div);
+        });
+
+        if (incluirOtro) {
+          const div = document.createElement("div");
+
+          const checkboxOtro = document.createElement("input");
+          checkboxOtro.type = "checkbox";
+          checkboxOtro.id = `${id}_otro`;
+          checkboxOtro.name = name || id;
+          checkboxOtro.value = "Otros";
+
+          const labelOtro = document.createElement("label");
+          labelOtro.htmlFor = checkboxOtro.id;
+          labelOtro.textContent = " Otro";
+
+          const inputOtro = document.createElement("input");
+          inputOtro.type = "text";
+          inputOtro.id = `${id}_otro_valor`;
+          inputOtro.name = `${name || id}_otro_valor`;
+          inputOtro.placeholder = "Especifique...";
+          inputOtro.disabled = true;
+          inputOtro.setAttribute("aria-label", "Otro valor personalizado");
+
+          checkboxOtro.addEventListener("change", () => {
+            inputOtro.disabled = !checkboxOtro.checked;
+            if (!checkboxOtro.checked) inputOtro.value = "";
+          });
+
+          const labelWrapper = document.createElement("label");
+          labelWrapper.appendChild(checkboxOtro);
+          labelWrapper.append(labelOtro.textContent);
+
+          div.appendChild(labelWrapper);
+          div.appendChild(inputOtro);
+
+          fieldset.appendChild(div);
+        }
+
+        contenedor.appendChild(fieldset);
+
+      } else if (type === "select") {
+        const label = document.createElement("label");
+        label.htmlFor = id;
+        label.textContent = labelText;
+        contenedor.appendChild(label);
+
+        const select = document.createElement("select");
+        select.id = id;
+        select.name = name || id;
+        if (required) {
+          select.required = true;
+          select.setAttribute('data-was-required', 'true');
+        }
+
+        const defaultOption = document.createElement("option");
+        defaultOption.textContent = "Seleccione una opción";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.value = "";
+        select.appendChild(defaultOption);
+
+        options.forEach(opcionTexto => {
+          const opcion = document.createElement("option");
+          opcion.value = opcionTexto;
+          opcion.textContent = opcionTexto;
+          select.appendChild(opcion);
+        });
+
+        contenedor.appendChild(select);
+
+      } else {
+        const label = document.createElement("label");
+        label.htmlFor = id;
+        label.textContent = labelText;
+        contenedor.appendChild(label);
+
+        const input = document.createElement("input");
+        input.type = type;
+        input.id = id;
+        input.name = name || id;
+        if (required) {
+          input.required = true;
+          input.setAttribute('data-was-required', 'true');
+        }
+
+        if (type === "file") {
+          if (accept) {
+            input.accept = accept;
+          }
+
+          if (accept.startsWith("image/") && preview) {
+            const previewContainer = document.createElement("div");
+            previewContainer.style.marginTop = "8px";
+
+            const previewImg = document.createElement("img");
+            previewImg.id = `preview-${id}`;
+            previewImg.style.maxWidth = "100%";
+            previewImg.style.maxHeight = "150px";
+            previewImg.style.display = "none";
+            previewImg.className = "preview-image";
+            previewContainer.appendChild(previewImg);
+
+            input.addEventListener("change", function () {
+              if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                  previewImg.src = e.target.result;
+                  previewImg.style.display = "block";
+                };
+                reader.readAsDataURL(this.files[0]);
+              } else {
+                previewImg.style.display = "none";
+              }
+            });
+
+            contenedor.appendChild(previewContainer);
+          }
+        }
+
+        contenedor.appendChild(input);
+      }
+
+      return contenedor;
+    }
+
+    function obtenerValoresCheckbox(nombreGrupo) {
+      const seleccionados = document.querySelectorAll(`input[name="${nombreGrupo}"]:checked`);
+      const valores = [];
+
+      // Buscar el input de "otro"
+      const otroInput = document.querySelector(`input[name="${nombreGrupo}_otro_valor"]`);
+      const valorOtro = otroInput && !otroInput.disabled ? otroInput.value.trim() : "";
+
+      seleccionados.forEach(cb => {
+        // Si el checkbox es "Otros" y el usuario escribió algo, no lo agregues
+        if (cb.value.toLowerCase() === "otros" && valorOtro) return;
+        valores.push(cb.value);
+      });
+
+      // Si hay valor personalizado, agregarlo
+      if (valorOtro) valores.push(valorOtro);
+
+      return valores;
+    }
+
+    function cerrarModal(id) {
+      const modal = document.getElementById(id);
+
+      if (modal) {
+        modal.remove();
+      }
+    }
+
+    /**
+     * Maneja el evento de selección de archivos e inicia la carga.
+     */
+    let processedCount = 0; // contador global
+
+    async function compressImage(file, maxSizeMB = 2, maxWidth = 1920, maxHeight = 1080, qualityStep = 0.05) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const ext = file.name.split('.').pop().toLowerCase();
+          let workingFile = file;
+          let newName = file.name;
+
+          const img = new Image();
+          const reader = new FileReader();
+
+          reader.onload = e => img.src = e.target.result;
+
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth || height > maxHeight) {
+              const ratio = Math.min(maxWidth / width, maxHeight / height);
+              width = Math.round(width * ratio);
+              height = Math.round(height * ratio);
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let quality = 0.8;
+            let base64 = canvas.toDataURL("image/jpeg", quality);
+
+            while (base64.length / 1024 / 1024 > maxSizeMB && quality > qualityStep) {
+              quality -= qualityStep;
+              base64 = canvas.toDataURL("image/jpeg", quality);
+            }
+
+            resolve({ base64, fileName: newName });
+          };
+
+          img.onerror = () => {
+            reject(`No se pudo cargar la imagen ${file.name}`);
+          };
+
+          reader.readAsDataURL(workingFile);
+
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    /**
+    * Maneja el evento de selección de archivos e inicia la carga PARALELA.
+    */
+    async function handleUpload(caso) {
+      const botonCompletar = document.getElementById("boton-completar-form");
+      botonCompletar.disabled = true;
+      botonCompletar.textContent = "ENVIANDO...";
+
+      let fotos = [];
+      let uploadResults = new Array(10).fill(null); // Array de URLs en orden
+      let totalFotos = 0;
+
+      // Recolectar imágenes y validar (misma lógica)
+      for (let i = 1; i <= 10; i++) {
+        const input = document.getElementById(`foto-${i}`);
+        if (input && input.files[0]) {
+          const file = input.files[0];
+          const ext = file.name.split('.').pop().toLowerCase();
+
+          // Bloquear HEIC/HEIF
+          if (ext === "heic" || ext === "heif") {
+            alert(`El archivo "${file.name}" tiene formato HEIC/HEIF, que no está permitido.`);
+            botonCompletar.disabled = false;
+            botonCompletar.textContent = "ENVIAR";
+            return;
+          }
+
+          const extensionesPermitidas = ["jpg", "jpeg", "png", "gif", "webp"];
+          if (!file.type.startsWith("image/") && !extensionesPermitidas.includes(ext)) {
+            alert(`El archivo "${file.name}" no es un formato de imagen permitido.`);
+            botonCompletar.disabled = false;
+            botonCompletar.textContent = "ENVIAR";
+            return;
+          }
+
+          fotos.push({ file, index: i - 1 }); // Guardamos el archivo junto a su índice original
+          totalFotos++;
+        }
+      }
+
+      const statusEl = document.getElementById("statusMessage");
+      const outputEl = document.getElementById("output");
+      outputEl.classList.remove("hidden");
+
+      if (totalFotos === 0) {
+        statusEl.textContent = 'No se ha seleccionado ningún archivo.';
+        botonCompletar.disabled = false;
+        botonCompletar.textContent = "ENVIAR";
+        return;
+      }
+
+      statusEl.textContent = `Iniciando carga PARALELA de ${totalFotos} archivos...`;
+      outputEl.innerHTML = '';
+
+      // 1. Asegurar carpeta única en el servidor
+      google.script.run
+        .withSuccessHandler(async folderId => {
+
+          // 2. Crear un array de promesas de subida
+          const uploadPromises = fotos.map(({ file, index }) => {
+
+            const progressDiv = document.createElement("div");
+            progressDiv.id = `progress-${index}`;
+            progressDiv.className = 'file-progress';
+            progressDiv.textContent = `Subiendo: ${file.name} (slot ${index + 1})...`;
+            outputEl.appendChild(progressDiv);
+            outputEl.scrollTop = outputEl.scrollHeight;
+
+            // Retornar una promesa que maneja todo el ciclo de vida del archivo
+            return (async () => {
+              try {
+                // A. Compresión
+                const { base64, fileName } = await compressImage(file);
+                const datosBase64 = base64.split(",")[1];
+
+                // B. Subida (google.script.run envuelta en promesa)
+                const response = await new Promise((resolve, reject) => {
+                  google.script.run
+                    .withSuccessHandler(resolve)
+                    .withFailureHandler(reject)
+                    .uploadFile(datosBase64, fileName, index, caso, folderId);
+                });
+
+                // C. Éxito: Actualizar UI y resultado en el índice correcto
+                uploadResults[index] = response.fileUrl || null;
+                progressDiv.textContent = response.fileUrl
+                  ? `✅ Subido: ${response.fileName}`
+                  : `⚠️ Subido (sin URL): ${response.fileName}`;
+
+                return response; // Retorno de éxito
+
+              } catch (err) {
+                // D. Fallo (compresión o subida): Actualizar UI y marcar como null
+                uploadResults[index] = null;
+                progressDiv.textContent = `❌ Fallo en ${file.name}: ${err.message || err}`;
+                console.error(`Error en archivo ${index}:`, err);
+
+                // Es crucial RESOLVER aquí para que Promise.allSettled no falle.
+                return { status: 'failed', error: err };
+              }
+            })();
+          });
+
+          // 3. Esperar a que todas las subidas terminen (éxito o fallo)
+          await Promise.allSettled(uploadPromises);
+
+          // 4. Finalizar proceso
+          statusEl.textContent = `¡Todos los archivos han sido procesados! (${totalFotos} subidas).`;
+          // uploadResults ya contiene las URLs en orden (o null)
+          enviarAuditoriaFinal(uploadResults, caso);
+
+        })
+        .withFailureHandler(err => {
+          // Este bloque se ejecuta si asegurarCarpetaUnica falla
+          botonCompletar.disabled = false;
+          botonCompletar.textContent = "ENVIAR";
+          const mensajeError = `Error al asegurar la carpeta: ${err.message || err}.`;
+          outputEl.innerHTML = `<p style="color: red;">${mensajeError}</p>`;
+        })
+        .asegurarCarpetaUnica(caso.idCarpeta || "default");
+    }
+
+
+
+    // Maneja subida exitosa de un archivo individual
+    function onFileUploaded(response, index, progressElement, resultsArray, totalFotos, caso) {
+      console.log("index: ", index);
+      resultsArray[index] = response.fileUrl || null;
+      progressElement.textContent = response.fileUrl
+        ? `✅ Subido: ${response.fileName}`
+        : `⚠️ Subido pero sin URL: ${response.fileName}`;
+
+      processedCount++;
+      console.log(response.fileUrl);
+      checkAllDone(resultsArray, totalFotos, caso);
+    }
+
+
+    // Maneja fallo de subida de un archivo individual
+    function onFileFailed(error, index, progressElement, resultsArray, totalFotos, caso) {
+      resultsArray[index] = null;
+      progressElement.textContent = `❌ Fallo al subir ${index}: ${error.message || error}`;
+      console.error(`Error en slot ${index}:`, error);
+
+      checkAllDone(resultsArray, totalFotos, caso);
+    }
+
+    // Verifica si terminaron todas las subidas
+    function checkAllDone(resultsArray, totalFotos, caso) {
+      document.getElementById('statusMessage').textContent = `Procesando: ${processedCount} de ${totalFotos} archivos.`;
+
+      if (processedCount === totalFotos) {
+        document.getElementById('statusMessage').textContent = `¡Todos los archivos han sido procesados!`;
+        enviarAuditoriaFinal(resultsArray, caso);
+      }
+    }
+
+    // ==== CLIENTE: Manejo de edición con compresión (VERSIÓN PARALELA) ====
+    async function handleUploadEditar(caso) {
+      const botonEditar = document.getElementById("boton-editar-form");
+      botonEditar.disabled = true;
+      botonEditar.textContent = "ENVIANDO...";
+
+      const mensajeGuardado = document.getElementById("msg-guardado-editar");
+      mensajeGuardado.textContent = "";
+
+      const outputEl = document.getElementById("outputEditar");
+      outputEl.classList.remove("hidden");
+      outputEl.textContent = "";
+
+      // Paso 1: Recolectar archivos nuevos y preparar URLs antiguas
+      let fotosNuevas = [];
+      let uploadResults = new Array(10).fill(null);
+      let totalFotosAProcesar = 0;
+
+      for (let i = 1; i <= 10; i++) {
+        const index = i - 1;
+        const input = document.getElementById(`foto-editar-${i}`);
+
+        if (input && input.files[0]) {
+          // Hay una foto nueva: se añade a la lista de procesamiento
+          fotosNuevas.push({ file: input.files[0], index });
+          totalFotosAProcesar++;
+        } else {
+          // No hay foto nueva: se conserva la URL antigua
+          uploadResults[index] = caso[`fotoUrl${i}`] || null;
+        }
+      }
+
+      // Manejo si no se subieron fotos
+      if (totalFotosAProcesar === 0) {
+        alert("No se seleccionó ninguna foto nueva. Se conservan las anteriores. Guardando otros datos...");
+        // Asume que si no hay fotos, hay otros datos a guardar y continúa
+      }
+
+      // Paso 2: Primero asegurar carpeta única en Drive
+      google.script.run
+        .withSuccessHandler(async folderId => {
+
+          // 2. Crear un array de promesas para Subida y Eliminación (PARALELO)
+          const uploadPromises = fotosNuevas.map(({ file, index }) => {
+
+            const progressDiv = document.createElement("div");
+            progressDiv.className = "progressDiv";
+            progressDiv.id = `progress-editar-${index}`;
+            progressDiv.textContent = `Procesando: ${file.name}...`;
+            outputEl.appendChild(progressDiv);
+            outputEl.scrollTop = outputEl.scrollHeight;
+
+            // Retornar la promesa que gestiona la compresión, eliminación y subida
+            return (async () => {
+              try {
+                // A. Compresión
+                const { base64, fileName } = await compressImage(file, 1, 1920, 1080, 0.05);
+                const datosBase64 = base64.split(",")[1];
+
+                await new Promise(resolve => {
+                  google.script.run
+                    .withSuccessHandler(resolve)
+                    .withFailureHandler(err => {
+                      // Advertencia: Falla de eliminación, pero debe CONTINUAR con la subida
+                      console.warn("No se pudo eliminar foto antigua (continúa):", err);
+                      resolve();
+                    })
+                    .eliminarArchivoPorNombre(folderId, index, caso);
+                });
+
+                // C. SUBIR FOTO NUEVA
+                const resultado = await new Promise((resolve, reject) => {
+                  google.script.run
+                    .withSuccessHandler(resolve)
+                    .withFailureHandler(reject)
+                    .uploadFile(datosBase64, fileName, index, caso, folderId);
+                });
+
+                // D. Éxito: Guardar la nueva URL en el índice correcto
+                uploadResults[index] = resultado.fileUrl || null;
+
+                // Actualización de progreso
+                progressDiv.textContent = resultado.fileUrl
+                  ? `✅ Subido: ${file.name}`
+                  : `⚠️ Subido pero sin URL: ${file.name}`;
+
+                return resultado; // Retorno de éxito
+
+              } catch (err) {
+                // E. Fallo (compresión, subida): Actualizar UI y marcar como null
+                uploadResults[index] = null;
+                progressDiv.textContent = `❌ Error: ${file.name} - ${err.message || err}`;
+                console.error(err);
+
+                return { status: 'failed', error: err };
+              }
+            })();
+          });
+
+          // 3. Esperar a que TODAS las promesas (subidas) terminen
+          await Promise.allSettled(uploadPromises);
+
+          // 4. Llamada final para guardar Edición con todas las URLs
+          google.script.run
+            .withSuccessHandler(() => {
+              botonEditar.textContent = "EDITADO";
+              botonEditar.disabled = true;
+              mensajeGuardado.textContent = "Edición guardada correctamente!";
+              cerrarModal("modal-editar");
+              cargarCasos()
+            })
+            .withFailureHandler(err => {
+              botonEditar.textContent = "EDITAR";
+              botonEditar.disabled = false;
+              alert("Error guardando edición: " + (err.message || err));
+            })
+            .guardarEdicion({
+              datosCaso: caso,
+              imagenes: uploadResults
+            });
+
+        })
+        .withFailureHandler(err => {
+          botonEditar.textContent = "EDITAR";
+          botonEditar.disabled = false;
+          alert("Error al asegurar la carpeta: " + (err.message || err));
+        })
+        .asegurarCarpetaUnica(caso.idCarpeta || "auditorias-generales");
+    }
+
+    function getInputValue(id) {
+      const el = document.getElementById(id);
+      return el ? el.value : "";
+    }
+
+  </script>
+</body>
+
+</html>
