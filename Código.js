@@ -11,12 +11,12 @@ const CONFIG = {
 };
 
 /*-VARIABLE GLOBAL-*/
-const SPREADSHEET_ID = "1Nj0UvAKopoQbHxrMui8yXITzDYEzkWbPvF5VPpbL3UU"; //ID del archivo
+const SPREADSHEET_ID = ""; //ID del archivo
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile("Index")
-  .setTitle("Modo")
-  .setFaviconUrl("https://raw.githubusercontent.com/DavidDeVito2001/Image/refs/heads/main/logoTrading.ico");
+    .setTitle("Modo")
+    .setFaviconUrl("https://raw.githubusercontent.com/DavidDeVito2001/Image/refs/heads/main/logoTrading.ico");
 }
 
 function obtenerHoja(nombre) {
@@ -80,7 +80,7 @@ function getDatosAuditor(auditorDNI) {
     if (datosValidos.valido === true) {
       let token = Utilities.getUuid();
       let expiracion = new Date().getTime() + 3600000;
-      let sessionData = JSON.stringify({token, expiracion});
+      let sessionData = JSON.stringify({ token, expiracion });
       PropertiesService.getUserProperties().setProperty("session_" + datosValidos.dni, sessionData);
       datosValidos.token = token;
       Logger.log(datosValidos);
@@ -88,7 +88,7 @@ function getDatosAuditor(auditorDNI) {
     }
     Logger.log(datosValidos);
     return datosValidos;
-  } catch(e) {
+  } catch (e) {
     Logger.log("Error: " + e.message);
     return {
       valido: false,
@@ -103,7 +103,7 @@ function uploadFile(data, nombreOriginal, index, caso, folderId) {
   try {
     const folder = DriveApp.getFolderById(folderId);
     const extension = nombreOriginal.split('.').pop();
-    const nombreArchivo = `${caso.idMODO || 'sinID'}-${String(index + 1).padStart(2,'0')}.${extension}`;
+    const nombreArchivo = `${caso.idMODO || 'sinID'}-${String(index + 1).padStart(2, '0')}.${extension}`;
     const bytes = Utilities.base64Decode(data);
     const blob = Utilities.newBlob(bytes, `image/${extension}`, nombreArchivo);
     const file = folder.createFile(blob);
@@ -127,9 +127,9 @@ function guardarAuditoria(datos) {
     const imagenesConDatos = imagenes.filter(img => img && img.length > 0).length;
 
     if (imagenesConDatos === 0) {
-      return { 
-        success: false, 
-        error: "No se recibieron imágenes válidas para guardar." 
+      return {
+        success: false,
+        error: "No se recibieron imágenes válidas para guardar."
       };
     }
 
@@ -202,7 +202,7 @@ function guardarAuditoria(datos) {
   } catch (error) {
     const tiempoError = (new Date().getTime() - startTime) / 1000;
     Logger.log(`Error después de ${tiempoError}s: ${error.stack}`);
-    
+
     return {
       success: false,
       error: `Error del servidor: ${error.message}`,
@@ -223,58 +223,58 @@ function guardarAuditoria(datos) {
  * * @param {object} datos Contiene datosCaso (con fila) e imagenes (array plano de URLs).
  */
 function guardarEdicion(datos) {
-    const startTime = new Date().getTime();
-    
-    try { 
-        const hoja = obtenerHoja("NewFormulario");
-        if (!hoja) throw new Error("No se encontró la hoja NewFormulario");
-        
-        const fila = datos.datosCaso.fila;
-        if (!fila || typeof fila !== 'number' || fila < 2) {
-            throw new Error("Error crítico: El número de fila es inválido o faltante.");
-        }
-        
-        // Array de URLs que el cliente nos envía (contiene: URL_Nueva, URL_Antigua, o null)
-        const urlsDesdeCliente = datos.imagenes || Array(10).fill(null);
-        
-        // 1. OBTENER LAS URLs ACTUALES (Para comparar y conservar)
-        // Leemos solo las 10 columnas de fotos (39-48) en un solo batch
-        const urlsActualesHoja = hoja.getRange(fila, 38, 1, 10).getValues()[0];
-        
-        const respuestasFinales = [];
-        
-        // 2. CONSTRUIR EL ARRAY FINAL
-        for (let i = 0; i < 10; i++) {
-            const urlNuevaOEditada = urlsDesdeCliente[i];
-            const urlActual = urlsActualesHoja[i] || "";
-            
-            if (urlNuevaOEditada) {
-                // Si el cliente envió una URL (significa que se subió una nueva o se conservó)
-                respuestasFinales.push(urlNuevaOEditada);
-            } else {
-                // Si el cliente envió NULL/Vacío (significa que NO se subió nada o falló),
-                // CONSERVAMOS la URL que ya estaba en la hoja.
-                respuestasFinales.push(urlActual);
-            }
-        }
-        
-        // 3. ESCRITURA BATCH
-        
-        // Actualizar columnas de fotos (39-48)
-        hoja.getRange(fila, 38, 1, 10).setValues([respuestasFinales]);
-        
-        // Limpiar columnas de edición (49-57)
-        hoja.getRange(fila, 50, 1, 10).setValues([Array(10).fill("")]);
-        
-        const tiempoTotal = (new Date().getTime() - startTime) / 1000;
-        Logger.log(`✅ Edición finalizada en ${tiempoTotal}s para caso ${datos.datosCaso.idCaso}`);
-        
-        return { success: true };
-        
-    } catch (error) {
-        Logger.log(`Error en edición final: ${error.stack}`);
-        throw new Error(`Error en la edición (actualización de URLs): ${error.message}`);
+  const startTime = new Date().getTime();
+
+  try {
+    const hoja = obtenerHoja("NewFormulario");
+    if (!hoja) throw new Error("No se encontró la hoja NewFormulario");
+
+    const fila = datos.datosCaso.fila;
+    if (!fila || typeof fila !== 'number' || fila < 2) {
+      throw new Error("Error crítico: El número de fila es inválido o faltante.");
     }
+
+    // Array de URLs que el cliente nos envía (contiene: URL_Nueva, URL_Antigua, o null)
+    const urlsDesdeCliente = datos.imagenes || Array(10).fill(null);
+
+    // 1. OBTENER LAS URLs ACTUALES (Para comparar y conservar)
+    // Leemos solo las 10 columnas de fotos (39-48) en un solo batch
+    const urlsActualesHoja = hoja.getRange(fila, 38, 1, 10).getValues()[0];
+
+    const respuestasFinales = [];
+
+    // 2. CONSTRUIR EL ARRAY FINAL
+    for (let i = 0; i < 10; i++) {
+      const urlNuevaOEditada = urlsDesdeCliente[i];
+      const urlActual = urlsActualesHoja[i] || "";
+
+      if (urlNuevaOEditada) {
+        // Si el cliente envió una URL (significa que se subió una nueva o se conservó)
+        respuestasFinales.push(urlNuevaOEditada);
+      } else {
+        // Si el cliente envió NULL/Vacío (significa que NO se subió nada o falló),
+        // CONSERVAMOS la URL que ya estaba en la hoja.
+        respuestasFinales.push(urlActual);
+      }
+    }
+
+    // 3. ESCRITURA BATCH
+
+    // Actualizar columnas de fotos (39-48)
+    hoja.getRange(fila, 38, 1, 10).setValues([respuestasFinales]);
+
+    // Limpiar columnas de edición (49-57)
+    hoja.getRange(fila, 50, 1, 10).setValues([Array(10).fill("")]);
+
+    const tiempoTotal = (new Date().getTime() - startTime) / 1000;
+    Logger.log(`✅ Edición finalizada en ${tiempoTotal}s para caso ${datos.datosCaso.idCaso}`);
+
+    return { success: true };
+
+  } catch (error) {
+    Logger.log(`Error en edición final: ${error.stack}`);
+    throw new Error(`Error en la edición (actualización de URLs): ${error.message}`);
+  }
 }
 
 // ===== FUNCIÓN MEJORADA PARA ELIMINAR ARCHIVOS =====
@@ -289,18 +289,18 @@ function guardarEdicion(datos) {
 function eliminarArchivoPorNombre(folderId, index, caso) {
   try {
     const folder = DriveApp.getFolderById(folderId);
-    
+
     // Calculamos el nombre base que tendrá el archivo (ej: 'CASO123-01')
-    const nombreBase = `${caso.idMODO || 'sinID'}-${String(index + 1).padStart(2,'0')}`;
-    
+    const nombreBase = `${caso.idMODO || 'sinID'}-${String(index + 1).padStart(2, '0')}`;
+
     // Búsqueda en Drive: título que contenga el nombre base y no esté en la papelera
     const query = `title contains '${nombreBase}' and trashed = false`;
     const archivos = folder.searchFiles(query);
-    
+
     let eliminados = 0;
     while (archivos.hasNext()) {
       const archivo = archivos.next();
-      
+
       // Verificación estricta: nos aseguramos de que el nombre empiece exactamente
       // con nuestro nombre base (para evitar eliminar archivos como CASO-01_temp.jpg)
       if (archivo.getName().startsWith(nombreBase)) {
@@ -309,13 +309,13 @@ function eliminarArchivoPorNombre(folderId, index, caso) {
         eliminados++;
       }
     }
-    
+
     if (eliminados === 0) {
       Logger.log(`No se encontró ningún archivo con nombre base: ${nombreBase} para eliminar.`);
     }
-    
+
     return { success: true, eliminados: eliminados };
-    
+
   } catch (error) {
     Logger.log(`Error eliminando por nombre: ${error.message} para index ${index}. Stack: ${error.stack}`);
     return { success: false, error: error.message };
@@ -323,7 +323,7 @@ function eliminarArchivoPorNombre(folderId, index, caso) {
 }
 
 function asegurarCarpetaUnica(carpetaID) {
-  const carpetaPrincipal = DriveApp.getFolderById("1XCUlgju31v7Ei1gHmy-2zO41JclH0IMK");
+  const carpetaPrincipal = DriveApp.getFolderById("");
   let subcarpetas = carpetaPrincipal.getFoldersByName(carpetaID);
 
   if (subcarpetas.hasNext()) {
@@ -355,18 +355,18 @@ function obtenerOCrearCarpeta(nombreCarpeta) {
 function buscarFilaPorId(idCaso) {
   try {
     const hoja = obtenerHoja("NewFormulario");
-    
+
     // Lee la Columna D completa
     const data = hoja.getRange(1, 4, hoja.getLastRow(), 1).getValues();
-    
+
     // Busca el ID del caso
     const filaEncontrada = data.findIndex(row => row[0] === idCaso);
-    
+
     if (filaEncontrada !== -1) {
       return filaEncontrada + 1; // Retorna la fila base 1
     }
     return null;
-    
+
   } catch (e) {
     Logger.log("Error buscando fila: " + e.message);
     return null;
